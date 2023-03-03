@@ -20,7 +20,7 @@ class AppError extends Error {
 }
 
 utilsHelper.catchAsync = (func) => (req, res, next) =>
-  func(req, res, next).catch((err) => console.log(err));
+  func(req, res, next).catch((err) => next(err));
 
 utilsHelper.AppError = AppError;
 
