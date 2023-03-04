@@ -32,7 +32,7 @@ userController.createUser = catchAsync(async (req, res, next) => {
   } else {
     let user = await User.findOne({ email });
     if (user) throw new AppError(400, "User exists", "Create User Error");
-    if (password.length === 8)
+    if (password.length !== 8)
       throw new AppError(
         400,
         "Password must be 8 characters",
