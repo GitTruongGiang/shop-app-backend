@@ -32,7 +32,7 @@ userController.createUser = catchAsync(async (req, res, next) => {
   } else {
     let user = await User.findOne({ email });
     if (user) throw new AppError(400, "User exists", "Create User Error");
-    if (password.lenght === 6)
+    if (password.length === 6)
       throw new AppError(
         400,
         "Password must be 6 characters",
@@ -74,7 +74,7 @@ userController.updateUser = catchAsync(async (req, res, next) => {
 
   allow.forEach(async (ele) => {
     if (req.body[ele] !== undefined) {
-      if (req.body[ele] === req.body["phone"] && req.body[ele].lenght === 10) {
+      if (req.body[ele] === req.body["phone"] && req.body[ele].length === 10) {
         user[ele] = req.body[ele];
       } else {
         // sendResponse(res, 200, true, {}, null, "Invalid Phone Number");
