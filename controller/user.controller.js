@@ -32,10 +32,10 @@ userController.createUser = catchAsync(async (req, res, next) => {
   } else {
     let user = await User.findOne({ email });
     if (user) throw new AppError(400, "User exists", "Create User Error");
-    if (password.length === 6)
+    if (password.length === 8)
       throw new AppError(
         400,
-        "Password must be 6 characters",
+        "Password must be 8 characters",
         "Create User Error"
       );
     const salt = await bcrypt.genSalt(10);
@@ -106,7 +106,6 @@ userController.resetPassword = catchAsync(async (req, res, next) => {
   const salt = await bcrypt.genSalt(10);
   const password = await bcrypt.hash("01234567", salt);
   user = await User.updateOne({ password: password });
-
   sendResponse(res, 200, true, user, null, "Update User Success");
 });
 module.exports = userController;
