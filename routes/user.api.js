@@ -5,6 +5,7 @@ const {
   getUser,
   updateUser,
   deletedUser,
+  resetPassword,
 } = require("../controller/user.controller");
 const authentication = require("../middlwe/authentication");
 const validations = require("../middlwe/validations");
@@ -55,5 +56,15 @@ router.delete(
   ]),
   deletedUser
 );
-
+// reset password
+router.post(
+  "/resetpassword",
+  validations.validate([
+    body("email", "invalid email")
+      .exists()
+      .notEmpty()
+      .normalizeEmail({ gmail_remove_dots: false }),
+  ]),
+  resetPassword
+);
 module.exports = router;

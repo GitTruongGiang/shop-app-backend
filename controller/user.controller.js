@@ -11,10 +11,10 @@ userController.createUser = catchAsync(async (req, res, next) => {
   if (role && role === "master") {
     let user = await User.findOne({ email });
     if (user) throw new AppError(400, "User exists", "Create User Error");
-    if (password.lenght === 6)
+    if (password.length !== 8)
       throw new AppError(
         400,
-        "Password must be 6 characters",
+        "Password must be 8 characters",
         "Create User Error"
       );
     const salt = await bcrypt.genSalt(10);
@@ -70,16 +70,13 @@ userController.updateUser = catchAsync(async (req, res, next) => {
   let user = await User.findById(userId);
   if (!user) throw new AppError(400, "User Not exstis", "Update User Error");
 
+  if (req.body.phone.length !== 10)
+    throw new AppError(400, "Invalid Phone Number");
+
   const allow = ["name", "phone", "address", "avatarUrl"];
 
   allow.forEach(async (ele) => {
     if (req.body[ele] !== undefined) {
-      if (req.body[ele] === req.body["phone"] && req.body[ele].length === 10) {
-        user[ele] = req.body[ele];
-      } else {
-        // sendResponse(res, 200, true, {}, null, "Invalid Phone Number");
-        throw new AppError(400, "Invalid Phone Number", "Update User Success");
-      }
       user[ele] = req.body[ele];
     }
   });
@@ -101,5 +98,15 @@ userController.deletedUser = catchAsync(async (req, res, next) => {
 
   sendResponse(res, 200, true, user, null, "deleted User Success");
 });
+// reset password
+userController.resetPassword = catchAsync(async (req, res, next) => {
+  const { email } = req.body;
+  let user = await User.find({ email }, "+password");
+  if (!user) throw new AppError(400, "User Not Exists", "Reset Password Error");
+  const salt = await bcrypt.genSalt(10);
+  const password = await bcrypt.hash("01234567", salt);
+  user = await User.updateOne({ password: password });
 
+  sendResponse(res, 200, true, user, null, "Update User Success");
+});
 module.exports = userController;
