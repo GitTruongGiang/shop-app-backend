@@ -104,8 +104,9 @@ userController.resetPassword = catchAsync(async (req, res, next) => {
   let user = await User.find({ email }, "+password");
   if (!user) throw new AppError(400, "User Not Exists", "Reset Password Error");
   const salt = await bcrypt.genSalt(10);
-  const password = await bcrypt.hash("01234567", salt);
-  user = await User.updateOne({ password: password });
-  sendResponse(res, 200, true, user, null, "Update User Success");
+  const password = await bcrypt.hash("12345678", salt);
+  console.log(password);
+  user = await User.updateOne({ email: email }, { password: password });
+  sendResponse(res, 200, true, user, null, "Reset Password Success");
 });
 module.exports = userController;
