@@ -61,8 +61,8 @@ userController.getUser = catchAsync(async (req, res, next) => {
 });
 // update user
 userController.updateUser = catchAsync(async (req, res, next) => {
-  const currentUserId = req.userId;
-  const userId = req.params.userId;
+  const currentUserId = await req.userId;
+  const userId = await req.params.userId;
 
   if (currentUserId !== userId)
     throw new AppError(400, "User Not Match", "Update User Error");
@@ -70,8 +70,9 @@ userController.updateUser = catchAsync(async (req, res, next) => {
   let user = await User.findById(userId);
   if (!user) throw new AppError(400, "User Not exstis", "Update User Error");
 
-  const allow = ["phone", "address", "avatarURL"];
-  allow.forEach((ele) => {
+  const allow = ["phone", "address", "avatarUrl"];
+
+  allow.forEach(async (ele) => {
     if (req.body[ele] !== undefined) {
       user[ele] = req.body[ele];
     }

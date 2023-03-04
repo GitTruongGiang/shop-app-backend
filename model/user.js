@@ -8,10 +8,15 @@ const userSchema = new Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, select: false },
-    phone: { type: Number, required: false, default: "" },
-    address: { type: String, required: false, default: "" },
-    avatarUrl: { type: String, required: false, default: "" },
-    role: { type: String, enum: ["normal", "master"], default: "normal" },
+    phone: { type: Number, require: false, default: "" },
+    address: { type: String, require: false, default: "" },
+    avatarUrl: { type: String, require: false, default: "" },
+    role: {
+      type: String,
+      require: false,
+      enum: ["normal", "master"],
+      default: "normal",
+    },
   },
   { timestamps: true }
 );
