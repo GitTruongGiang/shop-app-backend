@@ -70,10 +70,16 @@ userController.updateUser = catchAsync(async (req, res, next) => {
   let user = await User.findById(userId);
   if (!user) throw new AppError(400, "User Not exstis", "Update User Error");
 
-  const allow = ["phone", "address", "avatarUrl"];
+  const allow = ["name", "phone", "address", "avatarUrl"];
 
   allow.forEach(async (ele) => {
     if (req.body[ele] !== undefined) {
+      if (req.body[ele] === req.body["phone"] && req.body[ele].lenght === 10) {
+        user[ele] = req.body[ele];
+      } else {
+        // sendResponse(res, 200, true, {}, null, "Invalid Phone Number");
+        throw new AppError(400, "Invalid Phone Number", "Update User Success");
+      }
       user[ele] = req.body[ele];
     }
   });
