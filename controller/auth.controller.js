@@ -1,4 +1,5 @@
 const { AppError, sendResponse, catchAsync } = require("../helpers/utils");
+const { faker } = require("@faker-js/faker");
 const bcrypt = require("bcryptjs");
 
 const User = require("../model/user");
@@ -19,6 +20,7 @@ authController.loginWithEmail = catchAsync(async (req, res, next) => {
 
   const accessToken = await user.generateToken();
   sendResponse(res, 200, true, { user, accessToken }, null, "Login Success");
+  console.log(faker.image.business());
 });
 
 module.exports = authController;

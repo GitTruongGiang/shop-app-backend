@@ -14,7 +14,7 @@ userController.createUser = catchAsync(async (req, res, next) => {
     if (password.length !== 8)
       throw new AppError(
         400,
-        "Password must be 8 characters",
+        "Password Must Be 8 Characters",
         "Create User Error"
       );
     const salt = await bcrypt.genSalt(10);
@@ -35,7 +35,7 @@ userController.createUser = catchAsync(async (req, res, next) => {
     if (password.length !== 8)
       throw new AppError(
         400,
-        "Password must be 8 characters",
+        "Password Must Be 8 Characters",
         "Create User Error"
       );
     const salt = await bcrypt.genSalt(10);
@@ -108,5 +108,48 @@ userController.resetPassword = catchAsync(async (req, res, next) => {
   console.log(password);
   user = await User.updateOne({ email: email }, { password: password });
   sendResponse(res, 200, true, user, null, "Reset Password Success");
+});
+// change password
+userController.changePassword = catchAsync(async (req, res, next) => {
+  const currentUserId = req.userId;
+  const userId = req.params.userId;
+  const { password, changePassword } = req.body;
+
+  if (currentUserId !== userId)
+    throw new AppError(400, "User Not Match", "Change Password Error");
+  let user = await User.findById(userId, "+password");
+
+  if (!user)
+    throw new AppError(400, "User not Exists", "Change Password Error");
+
+  const isMatchPassword = await bcrypt.compare(password, user.password);
+
+  if (!isMatchPassword)
+    throw new AppError(400, "Password Don't Match", "Change Password Error");
+
+  if (changePassword.length !== 8)
+    throw new AppError(
+      400,
+      "Change Password Must Be 8 Characters",
+      "Change Password Error"
+    );
+
+  const isPasswordAndChangePassword = await bcrypt.compare(
+    changePassword,
+    user.password
+  );
+
+  if (isPasswordAndChangePassword)
+    throw new AppError(
+      400,
+      "Passwords Must Not Be The Same",
+      "Change Password Error"
+    );
+
+  const salt = await bcrypt.genSalt(10);
+  const newPassword = await bcrypt.hash(changePassword, salt);
+
+  user = await User.findByIdAndUpdate(userId, { password: newPassword });
+  sendResponse(res, 200, true, user, null, "Change Password Success");
 });
 module.exports = userController;
