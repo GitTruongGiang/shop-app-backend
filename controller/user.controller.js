@@ -152,4 +152,5 @@ userController.changePassword = catchAsync(async (req, res, next) => {
   user = await User.findByIdAndUpdate(userId, { password: newPassword });
   sendResponse(res, 200, true, user, null, "Change Password Success");
 });
+
 module.exports = userController;
