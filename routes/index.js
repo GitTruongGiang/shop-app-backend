@@ -8,8 +8,10 @@ router.get("/", function (req, res, next) {
 
 const authApi = require("./auth.api");
 const userApi = require("./user.api");
+const laptopApi = require("./laptop.api");
 
 router.use("/auth", authApi);
 router.use("/users", userApi);
+router.use("/laptop", laptopApi);
 
 module.exports = router;

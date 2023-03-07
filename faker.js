@@ -14,47 +14,32 @@ const fakerShop = async () => {
   let data = await csv().fromFile("DataLaptop.csv");
   data = new Set(data.filter((e) => e.brand === "APPLE")); //lenovo, apple, asus, dell, acer
   data = Array.from(data);
-  const brandLaptop = await Laptop.find({ brand: "apple" });
-  const newData = [];
-  // data.forEach((items) => {
-  //   newData.push({
-  //     authorLaptop: brandLaptop[0]._id,
-  //     model: items.model.toLowerCase(),
-  //     price: items.latest_price,
-  //     ratings: items.ratings,
-  //     weight: items.weight,
-  //     os: items.os.toLowerCase(),
-  //     os_bit: items.os_bit,
-  //     ssd: items.ssd,
-  //     ram_gb: items.ram_gb,
-  //     ram_type: items.ram_type,
-  //     processor_brand: items.processor_brand.toLowerCase(),
-  //     processor_name: items.processor_name.toLowerCase(),
-  //     processor_gnrtn: items.processor_gnrtn.toLowerCase(),
-  //   });
-  // });
-  for (let i = 0; i < data.length; i++) {
-    console.log(data[i]);
-    newData.push({
-      authorLaptop: brandLaptop[0]._id,
-      model: data[i].model.toLowerCase(),
-      price: data[i].latest_price,
-      ratings: data[i].ratings,
-      weight: data[i].weight,
-      os: data[i].os.toLowerCase(),
-      os_bit: data[i].os_bit,
-      ssd: data[i].ssd,
-      ram_gb: data[i].ram_gb,
-      ram_type: data[i].ram_type,
-      processor_brand: data[i].processor_brand.toLowerCase(),
-      processor_name: data[i].processor_name.toLowerCase(),
-      processor_gnrtn: data[i].processor_gnrtn.toLowerCase(),
+  const id = "640595dc2d4609cc3325c4ba";
+  const brandLaptop = await Laptop.findById(id);
+
+  data.forEach(async (e) => {
+    await ModelLaptop.create({
+      authorLaptop: brandLaptop._id,
+      model: e.model.toLowerCase(),
+      price: e.latest_price,
+      ratings: e.ratings,
+      weight: e.weight,
+      os: e.os.toLowerCase(),
+      os_bit: e.os_bit,
+      ssd: e.ssd,
+      ram_gb: e.ram_gb,
+      ram_type: e.ram_type,
+      processor_brand: e.processor_brand.toLowerCase(),
+      processor_name: e.processor_name.toLowerCase(),
+      processor_gnrtn: e.processor_gnrtn.toLowerCase(),
+      imageUrl: `https://shop-app-backend-production.up.railway.app/image/macbook${Math.floor(
+        Math.random() * (7 - 1) + 1
+      )}.png`,
     });
-  }
-  // newData.forEach(async (model) => {
-  //   await ModelLaptop.create(model);
-  // });
-  console.log(newData);
+  });
+
+  await Laptop.findByIdAndUpdate(id, { countlaptop: data.length });
+  console.log(data.length);
 };
 
 fakerShop();

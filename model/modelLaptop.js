@@ -26,4 +26,5 @@ const modelLaptopSchema = new Schema(
 );
 
 const ModelLaptop = mongoose.model("ModelLaptop", modelLaptopSchema);
+
 module.exports = ModelLaptop;

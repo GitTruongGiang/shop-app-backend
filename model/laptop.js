@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const laptopSchema = new Schema(
   {
     brand: { type: String, required: true, default: "" }, //lenovo, apple, asus, dell, acer
-    countbrand: { type: Number, require: false, default: 0 },
+    countlaptop: { type: Number, require: false, default: 0 },
   },
   { timestamps: true }
 );
