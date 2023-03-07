@@ -14,6 +14,7 @@ laptopController.getListLaptop = catchAsync(async (req, res, next) => {
     path: "authorLaptop",
     model: Laptop,
   });
+
   sendResponse(res, 200, true, data, null, "Get List Laptop Success");
 });
 
