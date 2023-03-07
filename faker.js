@@ -12,9 +12,9 @@ const ModelLaptop = require("./model/modelLaptop");
 
 const fakerShop = async () => {
   let data = await csv().fromFile("DataLaptop.csv");
-  data = new Set(data.filter((e) => e.brand === "DELL")); //lenovo, apple, asus, dell, acer
+  data = new Set(data.filter((e) => e.brand === "acer")); //lenovo, apple, asus, dell, acer
   data = Array.from(data);
-  const id = "640596512636ded2a61de4c7";
+  const id = "6405968488b9c14adf2fedb4";
   const brandLaptop = await Laptop.findById(id);
 
   data.forEach(async (e) => {
@@ -32,9 +32,9 @@ const fakerShop = async () => {
       processor_brand: e.processor_brand.toLowerCase(),
       processor_name: e.processor_name.toLowerCase(),
       processor_gnrtn: e.processor_gnrtn.toLowerCase(),
-      imageUrl: `https://shop-app-backend-production.up.railway.app/image/dell${Math.floor(
-        Math.random() * (7 - 1) + 1
-      )}.jpg`,
+      imageUrl: `https://shop-app-backend-production.up.railway.app/image/acer${Math.floor(
+        Math.random() * (6 - 1) + 1
+      )}.png`,
     });
   });
 
