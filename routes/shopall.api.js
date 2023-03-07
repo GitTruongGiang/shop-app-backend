@@ -4,7 +4,7 @@ const authentication = require("../middlwe/authentication");
 const validations = require("../middlwe/validations");
 const router = express.Router();
 
-router.get(
+router.post(
   "/shopall",
   authentication.loginRequired,
   validations.validate([]),
