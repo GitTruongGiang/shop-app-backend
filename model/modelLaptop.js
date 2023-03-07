@@ -9,7 +9,7 @@ const modelLaptopSchema = new Schema(
       ref: "Laptop",
     },
     model: { type: String, required: true, default: "" },
-    price: { type: Number, require: false, default: 0 },
+    price: { type: String, require: false, default: 0 },
     ratings: { type: String, require: false, default: "" },
     weight: { type: String, require: false, default: "" },
     os: { type: String, required: true, default: "" },
