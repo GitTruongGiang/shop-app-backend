@@ -8,15 +8,15 @@ const productController = {};
 
 // get all product
 productController.getAllProduct = catchAsync(async (req, res, next) => {
-  const currentUserId = req.userId;
+  // const currentUserId = req.userId;
   let { page, limit, ...fiterQuery } = req.query;
 
   page = parseInt(page) || 1;
   limit = parseInt(limit) || 10;
 
-  const user = await User.findById(currentUserId);
-  if (!user)
-    throw new AppError(400, "User Not Exists", "Get List All Product Error");
+  // const user = await User.findById(currentUserId);
+  // if (!user)
+  //   throw new AppError(400, "User Not Exists", "Get List All Product Error");
 
   const offset = limit * (page - 1);
   const count = await Product.countDocuments({ status: "none" });
