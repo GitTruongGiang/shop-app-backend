@@ -1,14 +1,14 @@
 const express = require("express");
-const { getAllListShop } = require("../controller/shop.controller");
+const { getAllProduct } = require("../controller/product.controller");
 const authentication = require("../middlwe/authentication");
 const validations = require("../middlwe/validations");
 const router = express.Router();
 
+// get all product
 router.post(
-  "/shopall",
+  "/allproduct",
   authentication.loginRequired,
   validations.validate([]),
-  getAllListShop
+  getAllProduct
 );
-
 module.exports = router;

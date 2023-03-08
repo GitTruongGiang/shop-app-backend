@@ -1,13 +1,19 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const modelLaptopSchema = new Schema(
+const productSchema = new Schema(
   {
-    authorLaptop: {
+    authorCatego: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "Laptop",
+      ref: "Catego",
     },
+    authorBrand: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "Brand",
+    },
+    //laptop
     model: { type: String, required: true, default: "" },
     latest_price: { type: String, require: false, default: "" },
     old_price: { type: String, require: false, default: "" },
@@ -16,6 +22,7 @@ const modelLaptopSchema = new Schema(
     weight: { type: String, require: false, default: "" },
     os: { type: String, required: true, default: "" },
     os_bit: { type: String, require: false, default: "" },
+    ssd: { type: String, require: false, default: "" },
     ssd: { type: String, require: false, default: "" },
     ram_gb: { type: String, require: false, default: "" },
     ram_type: { type: String, require: false, default: "" },
@@ -29,10 +36,14 @@ const modelLaptopSchema = new Schema(
       enum: ["none", "pedding", "success"],
       default: "none",
     },
+    //phone
+    memory_size: { type: String, require: false, default: "" },
+    battery_size: { type: String, require: false, default: "" },
+    screen_size: { type: String, require: false, default: "" },
   },
   { timestamps: true }
 );
 
-const ModelLaptop = mongoose.model("ModelLaptop", modelLaptopSchema);
+const Product = mongoose.model("Product", productSchema);
 
-module.exports = ModelLaptop;
+module.exports = Product;
