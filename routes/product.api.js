@@ -5,10 +5,5 @@ const validations = require("../middlwe/validations");
 const router = express.Router();
 
 // get all product
-router.post(
-  "/allproduct",
-  authentication.loginRequired,
-  validations.validate([]),
-  getAllProduct
-);
+router.post("/allproduct", validations.validate([]), getAllProduct);
 module.exports = router;
