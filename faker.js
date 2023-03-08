@@ -12,10 +12,10 @@ const ModelPhone = require("./model/modelPhone");
 
 const fakerShop = async () => {
   let data = await csv().fromFile("DataPhone.csv");
-  data = data.filter((e) => e.brand_name === "HUAWEI"); //Samsung, Apple, Xiaomi, HUAWEI, Sony
+  data = data.filter((e) => e.brand_name === "Sony"); //Samsung, Apple, Xiaomi, HUAWEI, Sony
   data = new Set(data.filter((e) => e.model_name));
   data = Array.from(data);
-  const id = "640847c09607f4084e20bdcd";
+  const id = "6408492b6fa417ae7660aee5";
   const brandPhone = await Phone.findById(id);
 
   // data = await data.find((e) => e.brand_name === "Sony");
@@ -32,10 +32,10 @@ const fakerShop = async () => {
       os: e.os.toLowerCase(),
       memory_size: e.memory_size.replace(".0", "") || "32",
       battery_size: e.battery_size.replace(".0", "") || "2691",
-      screen_size: e.screen_size,
-      imageUrl: `https://shop-app-backend-production.up.railway.app/imagephone/redmi${Math.floor(
-        Math.random() * (7 - 1) + 1
-      )}.jpg`,
+      screen_size: e.screen_size || "6",
+      imageUrl: `https://shop-app-backend-production.up.railway.app/imagephone/sony${Math.floor(
+        Math.random() * (8 - 1) + 1
+      )}.png`,
     });
   });
 
