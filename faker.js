@@ -12,10 +12,10 @@ const ModelPhone = require("./model/modelPhone");
 
 const fakerShop = async () => {
   let data = await csv().fromFile("DataPhone.csv");
-  data = data.filter((e) => e.brand_name === "realme"); //Samsung, Apple, Xiaomi, HUAWEI, Sony
+  data = data.filter((e) => e.brand_name === "HUAWEI"); //Samsung, Apple, Xiaomi, HUAWEI, Sony
   data = new Set(data.filter((e) => e.model_name));
   data = Array.from(data);
-  const id = "640847994bff849edc68c0fc";
+  const id = "640847c09607f4084e20bdcd";
   const brandPhone = await Phone.findById(id);
 
   // data = await data.find((e) => e.brand_name === "Sony");
@@ -39,12 +39,12 @@ const fakerShop = async () => {
     });
   });
 
-  let count = await brandPhone.countphone;
-  count = (await count) + data.length;
+  // let count = await brandPhone.countphone;
+  // count = (await count) + data.length;
 
   await Phone.findByIdAndUpdate(id, {
-    countphone: count,
-    quantityRemaining: count,
+    countphone: data.length,
+    quantityRemaining: data.length,
   });
 
   console.log(brandPhone.countphone);
