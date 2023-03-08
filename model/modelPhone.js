@@ -1,27 +1,22 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const modelLaptopSchema = new Schema(
+const modelPhoneSchema = new Schema(
   {
-    authorLaptop: {
+    authorPhone: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "Laptop",
+      ref: "Phone",
     },
     model: { type: String, required: true, default: "" },
     latest_price: { type: String, require: false, default: "" },
     old_price: { type: String, require: false, default: "" },
     discount: { type: String, require: false, default: "" },
     ratings: { type: String, require: false, default: "" },
-    weight: { type: String, require: false, default: "" },
     os: { type: String, required: true, default: "" },
-    os_bit: { type: String, require: false, default: "" },
-    ssd: { type: String, require: false, default: "" },
-    ram_gb: { type: String, require: false, default: "" },
-    ram_type: { type: String, require: false, default: "" },
-    processor_brand: { type: String, require: false, default: "" },
-    processor_name: { type: String, require: false, default: "" },
-    processor_gnrtn: { type: String, require: false, default: "" },
+    memory_size: { type: String, required: true, default: "" },
+    battery_size: { type: String, required: true, default: "" },
+    screen_size: { type: String, required: true, default: "" },
     imageUrl: { type: String, require: false, default: "" },
     status: {
       type: String,
@@ -33,6 +28,5 @@ const modelLaptopSchema = new Schema(
   { timestamps: true }
 );
 
-const ModelLaptop = mongoose.model("ModelLaptop", modelLaptopSchema);
-
-module.exports = ModelLaptop;
+const ModelPhone = mongoose.model("ModelPhone", modelPhoneSchema);
+module.exports = ModelPhone;

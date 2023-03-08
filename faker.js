@@ -9,32 +9,34 @@ mongoose
 
 const Laptop = require("./model/laptop");
 const ModelLaptop = require("./model/modelLaptop");
+const Phone = require("./model/phone");
 
 const fakerShop = async () => {
-  let data = await csv().fromFile("DataLaptop.csv");
-  data = new Set(data.filter((e) => e.brand === "acer")); //lenovo, apple, asus, dell, acer
+  let data = await csv().fromFile("DataPhone.csv");
+  data = data.filter((e) => e.brand_name === "Samsung"); //Samsung, Apple, Xiaomi, HUAWEI, Sony
+  data = new Set(data.filter((e) => e.model_name));
   data = Array.from(data);
-  const id = "6405968488b9c14adf2fedb4";
-  const brandLaptop = await Laptop.findById(id);
+  const id = "640846201c45a41d7f9c28e0";
+  const brandPhone = await Laptop.findById(id);
+
+  // data = await data.find((e) => e.brand_name === "Sony");
+  // await Phone.create({ brand: data.brand_name.toLowerCase() });
 
   data.forEach(async (e) => {
     await ModelLaptop.create({
-      authorLaptop: brandLaptop._id,
-      model: e.model.toLowerCase(),
-      price: e.latest_price,
+      authorLaptop: brandPhone._id,
+      model: e.model_name.toLowerCase(),
+      latest_price: e.best_price,
+      old_price: e.highest_price,
+      discount: e.sellers_amount,
       ratings: Math.floor(Math.random() * (6 - 1) + 1),
-      weight: e.weight,
       os: e.os.toLowerCase(),
-      os_bit: e.os_bit,
-      ssd: e.ssd,
-      ram_gb: e.ram_gb,
-      ram_type: e.ram_type,
-      processor_brand: e.processor_brand.toLowerCase(),
-      processor_name: e.processor_name.toLowerCase(),
-      processor_gnrtn: e.processor_gnrtn.toLowerCase(),
-      imageUrl: `https://shop-app-backend-production.up.railway.app/image/acer${Math.floor(
-        Math.random() * (6 - 1) + 1
-      )}.png`,
+      memory_size: e.memory_size.replace(".0", ""),
+      battery_size: e.battery_size.replace(".0", ""),
+      screen_size: e.screen_size,
+      imageUrl: `https://shop-app-backend-production.up.railway.app/imagephone/samsung${Math.floor(
+        Math.random() * (20 - 1) + 1
+      )}.jpg`,
     });
   });
 
@@ -42,6 +44,8 @@ const fakerShop = async () => {
     countlaptop: data.length,
     quantityRemaining: data.length,
   });
+  console.log(data);
+  console.log(data.length);
 };
 
 fakerShop();
