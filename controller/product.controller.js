@@ -12,7 +12,7 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
   let { page, limit, ...fiterQuery } = req.query;
 
   page = parseInt(page) || 1;
-  limit = parseInt(limit) || 10;
+  limit = parseInt(limit) || 20;
 
   // const user = await User.findById(currentUserId);
   // if (!user)
@@ -26,7 +26,7 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
     .populate({ path: "authorCatego", model: Catego })
     .populate({ path: "authorBrand", model: Brand });
 
-  data
+  data = data
     .sort(() => {
       return Math.random() - 0.5;
     })
