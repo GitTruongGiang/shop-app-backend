@@ -12,10 +12,10 @@ const ModelPhone = require("./model/modelPhone");
 
 const fakerShop = async () => {
   let data = await csv().fromFile("DataPhone.csv");
-  data = data.filter((e) => e.brand_name === "Apple"); //Samsung, Apple, Xiaomi, HUAWEI, Sony
+  data = data.filter((e) => e.brand_name === "Xiaomi"); //Samsung, Apple, Xiaomi, HUAWEI, Sony
   data = new Set(data.filter((e) => e.model_name));
   data = Array.from(data);
-  const id = "64084755428b78856ae0dc7c";
+  const id = "640847994bff849edc68c0fc";
   const brandPhone = await Phone.findById(id);
 
   // data = await data.find((e) => e.brand_name === "Sony");
@@ -25,16 +25,16 @@ const fakerShop = async () => {
     await ModelPhone.create({
       authorPhone: brandPhone._id,
       model: e.model_name.toLowerCase(),
-      latest_price: e.best_price.replace(".0", ""),
-      old_price: e.highest_price.replace(".0", ""),
+      latest_price: e.best_price.replace(".0", "") || "2900",
+      old_price: e.highest_price.replace(".0", "") || "3000",
       discount: e.sellers_amount,
       ratings: Math.floor(Math.random() * (6 - 1) + 1),
       os: e.os.toLowerCase(),
-      memory_size: e.memory_size.replace(".0", ""),
-      battery_size: e.battery_size.replace(".0", ""),
+      memory_size: e.memory_size.replace(".0", "") || "32",
+      battery_size: e.battery_size.replace(".0", "") || "2691",
       screen_size: e.screen_size,
-      imageUrl: `https://shop-app-backend-production.up.railway.app/imagephone/apple${Math.floor(
-        Math.random() * (12 - 1) + 1
+      imageUrl: `https://shop-app-backend-production.up.railway.app/imagephone/xiaomi${Math.floor(
+        Math.random() * (9 - 1) + 1
       )}.jpg`,
     });
   });
