@@ -2,6 +2,7 @@ const csv = require("csvtojson");
 const mongoose = require("mongoose");
 const Brand = require("./model/brand");
 const Catego = require("./model/category");
+const Count = require("./model/count");
 const Product = require("./model/product");
 mongoose
   .connect(
@@ -11,58 +12,67 @@ mongoose
   .catch((err) => console.log(err));
 
 const fakerShop = async () => {
-  let data = await csv().fromFile("DataPhone.csv");
-  data = data.filter((e) => e.brand_name === "Sony"); //Samsung, Apple, Xiaomi, HUAWEI, Sony //Lenovo, APPLE, ASUS, DELL, acer
+  let data = await csv().fromFile("DataLaptop.csv");
+  data = data.filter((e) => e.brand === "Lenovo"); //Samsung, Apple, Xiaomi, HUAWEI, Sony //Lenovo, APPLE, ASUS, DELL, acer
 
-  const idCatergory = "6408b30cbabc5c3cd544f895";
+  const idCatergory = "6408b2cd6df0de525b1faed2";
   const category = await Catego.findById(idCatergory);
 
-  const idbrand = "6408ba3938c5f567fd0e07e5";
+  const idbrand = "640961161455a47d88dc0769";
   const brand = await Brand.findById(idbrand);
-  console.log(category);
+  // console.log(category);
 
-  // data = await data.find((e) => e.brand === "acer");
-  // await Brand.create({ brand: "sony" });
+  // data = await data.find((e) => e.brand === "Lenovo");
+  // const newBrand = await Brand.create({ brand: "acer" });
+  // const countBrand = await Count.create({
+  //   authorBrand: newBrand._id,
+  //   catego: "laptop",
+  // });
 
   data.forEach(async (e) => {
     await Product.create({
       authorCatego: category._id,
       authorBrand: brand._id,
-      model: e.model_name.toLowerCase(),
-      latest_price: e.best_price.replace(".0", "") || "2900",
-      old_price: e.highest_price.replace(".0", "") || "3000",
-      // latest_price: e.latest_price.replace(".0", "") || "2900",
-      // old_price: e.old_price.replace(".0", "") || "3000",
-      // discount: e.discount,
-      // ratings: Math.floor(Math.random() * (6 - 3) + 3),
+      model: e.model.toLowerCase(),
+      // model: e.model_name.toLowerCase(),
+      // latest_price: e.best_price.replace(".0", "") || "2900",
+      // old_price: e.highest_price.replace(".0", "") || "3000",
+      latest_price: e.latest_price.replace(".0", "") || "2900",
+      old_price: e.old_price.replace(".0", "") || "3000",
+      discount: e.discount,
+      ratings: Math.floor(Math.random() * (6 - 3) + 3),
       os: e.os.toLowerCase(),
-      // weight: e.weight.toLowerCase(),
-      // os_bit: e.os_bit,
-      // ssd: e.ssd,
-      // hdd: e.hdd,
-      // ram_gb: e.ram_gb.replace(" GB", ""),
-      // ram_type: e.ram_type,
-      // processor_brand: e.processor_brand,
-      // processor_name: e.processor_name,
-      // processor_gnrtn: e.processor_gnrtn,
-      memory_size: e.memory_size.replace(".0", "") || "32",
-      battery_size: e.battery_size.replace(".0", "") || "2691",
-      screen_size: e.screen_size || "6",
-      imageUrl: `https://shop-app-backend-production.up.railway.app/imagephone/sony${Math.floor(
-        Math.random() * (8 - 1) + 1
-      )}.png`,
+      weight: e.weight.toLowerCase(),
+      os_bit: e.os_bit,
+      ssd: e.ssd,
+      hdd: e.hdd,
+      ram_gb: e.ram_gb.replace(" GB", ""),
+      ram_type: e.ram_type,
+      processor_brand: e.processor_brand,
+      processor_name: e.processor_name,
+      processor_gnrtn: e.processor_gnrtn,
+      // memory_size: e.memory_size.replace(".0", "") || "32",
+      // battery_size: e.battery_size.replace(".0", "") || "2691",
+      // screen_size: e.screen_size || "6",
+      imageUrl: `https://shop-app-backend-production.up.railway.app/imagelaptop/lenovo${Math.floor(
+        Math.random() * (4 - 1) + 1
+      )}.jpg`,
     });
   });
 
-  let count = await brand.count;
-  count = count + data.length;
+  let count = data.length;
 
-  await Brand.findByIdAndUpdate(idbrand, {
-    count: count,
-    quantityRemaining: count,
-  });
+  const countBrand = await Count.findOneAndUpdate(
+    { authorBrand: brand._id, catego: "laptop" },
+    { count: count, quantityRemaining: count }
+  );
 
-  console.log(data);
+  // let brandData = await Brand.findById(idbrand);
+  // brandData = brandData.count.forEach((e) => {});
+  // console.log(newBrand);
+  // console.log(countBrand);
+  console.log(data[0]);
+  console.log(countBrand);
 };
 
 fakerShop();
