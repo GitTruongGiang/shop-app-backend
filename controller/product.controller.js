@@ -31,7 +31,6 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
       return Math.random() - 0.5;
     })
     .slice(offset, offset + limit);
-  console.log(data.length);
 
   sendResponse(
     res,

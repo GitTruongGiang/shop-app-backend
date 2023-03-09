@@ -4,11 +4,10 @@ const { Schema } = mongoose;
 const countSchema = new Schema(
   {
     authorBrand: { type: Schema.Types.ObjectId, required: true, ref: "Brand" },
-    catego: {
-      type: String,
-      require: false,
-      enum: ["laptop", "phone"],
-      default: "laptop",
+    authorCatego: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "Catego",
     },
     count: { type: Number, require: false, default: 0 },
     quantityRemaining: { type: Number, require: false, default: 0 },

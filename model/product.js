@@ -36,6 +36,12 @@ const productSchema = new Schema(
       enum: ["none", "pedding", "success"],
       default: "none",
     },
+    stock: {
+      type: String,
+      require: false,
+      enum: ["stocking", "outofstock"],
+      default: "stocking",
+    },
     //phone
     memory_size: { type: String, require: false, default: "" },
     battery_size: { type: String, require: false, default: "" },
