@@ -11,7 +11,7 @@ const router = express.Router();
 // get all product
 router.get("/allproduct", validations.validate([]), getAllProduct);
 // get single product
-router.post(
+router.get(
   "/single/:productId",
   authentication.loginRequired,
   validations.validate([
