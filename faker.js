@@ -18,6 +18,7 @@ const fakerShop = async () => {
   const category = await Catego.findOne({ name: "phone" });
 
   const brand = await Brand.findOne({ brand: "sony" });
+
   // console.log(category);
 
   // data = await data.find((e) => e.brand === "Lenovo");
@@ -64,10 +65,10 @@ const fakerShop = async () => {
 
   let count = data.length;
 
-  const countBrand = await Count.findByIdAndUpdate(
-    { _id: "64097cc92fb3e42e3670be3a" },
-    { catego: category._id }
-  );
+  // const countBrand = await Count.findByIdAndUpdate(
+  //   { _id: "64097cc92fb3e42e3670be3a" },
+  //   { catego: category._id }
+  // );
 
   // let brandData = await Brand.findById(idbrand);
   // brandData = brandData.count.forEach((e) => {});

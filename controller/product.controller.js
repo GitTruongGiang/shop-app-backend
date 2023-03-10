@@ -8,15 +8,10 @@ const productController = {};
 
 // get all product
 productController.getAllProduct = catchAsync(async (req, res, next) => {
-  // const currentUserId = req.userId;
   let { page, limit, ...fiterQuery } = req.query;
 
   page = parseInt(page) || 1;
   limit = parseInt(limit) || 20;
-
-  // const user = await User.findById(currentUserId);
-  // if (!user)
-  //   throw new AppError(400, "User Not Exists", "Get List All Product Error");
 
   const offset = limit * (page - 1);
   const count = await Product.countDocuments({ status: "none" });
@@ -40,6 +35,20 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
     null,
     "Get List All Product"
   );
+});
+// get single product
+productController.getSingleProduct = catchAsync(async (req, res, next) => {
+  const currentUserId = req.userId;
+  const productId = req.params.productId;
+
+  const user = await User.findById(currentUserId);
+  if (!user)
+    throw new AppError(400, "User Not Exists", "Get Single Product Error");
+  const product = await Product.findById(productId);
+  if (!product)
+    throw new AppError(400, "Product Not Exists", "Get Single Product Error");
+
+  sendResponse(res, 200, true, product, null, "Get Single Product Success");
 });
 
 module.exports = productController;
