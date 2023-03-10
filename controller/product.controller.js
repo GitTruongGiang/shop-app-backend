@@ -8,18 +8,40 @@ const productController = {};
 
 // get all product
 productController.getAllProduct = catchAsync(async (req, res, next) => {
-  let { page, limit, ...fiterQuery } = req.query;
+  let { page, limit, ...filterQuery } = req.query;
+  console.log(filterQuery);
 
   page = parseInt(page) || 1;
   limit = parseInt(limit) || 20;
 
-  const offset = limit * (page - 1);
-  const count = await Product.countDocuments({ status: "none" });
-  const totalPage = Math.ceil(count / limit);
+  const arrBrand = [];
 
-  let data = await Product.find({})
-    .populate({ path: "authorCatego", model: Catego })
-    .populate({ path: "authorBrand", model: Brand });
+  if (filterQuery.search) {
+    const brand = await Brand.find({
+      brand: { $regex: filterQuery.search, $options: "i" },
+    });
+    brand.forEach((e) => {
+      arrBrand.push(e._id);
+    });
+  }
+
+  const filterConditions = [{ authorBrand: { $in: arrBrand } }];
+
+  const filterCrirerial = filterConditions.length
+    ? { $and: filterConditions }
+    : {};
+
+  let data = await Product.find(filterCrirerial).populate([
+    { path: "authorCatego", model: Catego },
+    {
+      path: "authorBrand",
+      model: Brand,
+    },
+  ]);
+
+  const offset = limit * (page - 1);
+  const count = await Product.countDocuments(filterCrirerial);
+  const totalPage = Math.ceil(count / limit);
 
   data = await data
     .sort(() => {
@@ -50,13 +72,30 @@ productController.getSingleProduct = catchAsync(async (req, res, next) => {
 });
 //get list brand procuct
 productController.getListBrandProduct = catchAsync(async (req, res, next) => {
-  const currentUserId = req.userId;
   let { page, limit, ...filterQuery } = req.query;
+  const allow = ["brand", "search"];
+
   page = parseInt(page) || 1;
   limit = parseInt(limit) || 20;
 
-  const user = await User.findById(currentUserId);
-  if (!user)
-    throw new AppError(400, "User Not Exists", "Get list Brand Product Error");
+  const offset = limit * (page - 1);
+  const count = await Product.countDocuments({});
+  const totalPage = Math.ceil(count / limit);
+
+  let products = await Product.find({});
+  products = products
+    .sort(() => {
+      return Math.random() - 0.5;
+    })
+    .slice(offset, offset + limit);
+
+  sendResponse(
+    res,
+    200,
+    true,
+    products,
+    null,
+    "Get List Brand Product Success"
+  );
 });
 module.exports = productController;
