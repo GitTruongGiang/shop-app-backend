@@ -38,12 +38,8 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
 });
 // get single product
 productController.getSingleProduct = catchAsync(async (req, res, next) => {
-  const currentUserId = req.userId;
   const productId = req.params.productId;
 
-  const user = await User.findById(currentUserId);
-  if (!user)
-    throw new AppError(400, "User Not Exists", "Get Single Product Error");
   const product = await Product.findById(productId)
     .populate({ path: "authorCatego", model: Catego })
     .populate({ path: "authorBrand", model: Brand });
