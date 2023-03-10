@@ -53,7 +53,14 @@ productController.getSingleProduct = catchAsync(async (req, res, next) => {
   sendResponse(res, 200, true, product, null, "Get Single Product Success");
 });
 //get list brand procuct
-productController.getListBrandProduct = catchAsync(
-  async (req, res, next) => {}
-);
+productController.getListBrandProduct = catchAsync(async (req, res, next) => {
+  const currentUserId = req.userId;
+  let { page, limit, ...filterQuery } = req.query;
+  page = parseInt(page) || 1;
+  limit = parseInt(limit) || 20;
+
+  const user = await User.findById(currentUserId);
+  if (!user)
+    throw new AppError(400, "User Not Exists", "Get list Brand Product Error");
+});
 module.exports = productController;

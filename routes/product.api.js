@@ -3,6 +3,7 @@ const { param } = require("express-validator");
 const {
   getAllProduct,
   getSingleProduct,
+  getListBrandProduct,
 } = require("../controller/product.controller");
 const authentication = require("../middlwe/authentication");
 const validations = require("../middlwe/validations");
@@ -13,7 +14,6 @@ router.get("/allproduct", validations.validate([]), getAllProduct);
 // get single product
 router.get(
   "/single/:productId",
-  authentication.loginRequired,
   validations.validate([
     param("productId", "invalid productId")
       .exists()
@@ -22,4 +22,6 @@ router.get(
   ]),
   getSingleProduct
 );
+// get list brand product
+router.get("/brand", validations.validate([]), getListBrandProduct);
 module.exports = router;
