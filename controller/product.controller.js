@@ -132,6 +132,14 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
 
   const newBrand = await Brand.findOne({ brand: brand });
 
+  const filterConditions = filterQuery.brand
+    ? [
+        { authorBrand: { $eq: newBrand._id } },
+        { model: { $regex: new RegExp(filterQuery.search, "i") } },
+        arrTypeObject.length ? arrTypeObject[0] : {},
+      ]
+    : null;
+
   if (filterQuery.type) {
     if (filterQuery.type?.includes("high-low")) {
       type = { latest_price: -1 };
@@ -141,14 +149,6 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
       arrTypeObject.push({ ["newProduct"]: `${filterQuery.type}` });
     }
   }
-
-  const filterConditions = filterQuery.brand
-    ? [
-        { authorBrand: { $eq: newBrand._id } },
-        { model: { $regex: new RegExp(filterQuery.search, "i") } },
-        arrTypeObject.length ? arrTypeObject[0] : {},
-      ]
-    : null;
 
   const filterCrirerial = filterQuery.brand ? { $and: filterConditions } : {};
 
@@ -166,6 +166,10 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
         model: Brand,
       },
     ]);
+
+  if (!data.length) {
+    sendResponse(res, 200, true, { data: [], totalPage: 0 }, null, "No Data");
+  }
 
   data = await data
     .sort(() => {
