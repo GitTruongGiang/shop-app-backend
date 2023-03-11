@@ -115,6 +115,8 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
   let { page, limit, ...filterQuery } = req.query;
   const allowfilter = ["brand", "search", "type"];
   const brand = filterQuery.brand;
+  let arrTypeObject = [];
+  let type = {};
 
   page = parseInt(page) || 1;
   limit = parseInt(limit) || 20;
@@ -130,10 +132,21 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
 
   const newBrand = await Brand.findOne({ brand: brand });
 
+  if (filterQuery.type) {
+    if (filterQuery.type?.includes("high-low")) {
+      type = { latest_price: -1 };
+    } else if (filterQuery.type?.includes("low-high")) {
+      type = { latest_price: 1 };
+    } else {
+      arrTypeObject.push({ ["newProduct"]: `${filterQuery.type}` });
+    }
+  }
+
   const filterConditions = filterQuery.brand
     ? [
         { authorBrand: { $eq: newBrand._id } },
         { model: { $regex: new RegExp(filterQuery.search, "i") } },
+        arrTypeObject.length ? arrTypeObject[0] : {},
       ]
     : null;
 
@@ -143,21 +156,24 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
   const count = await Product.countDocuments(filterCrirerial);
   const totalPage = Math.ceil(count / limit);
 
-  let data = await Product.find(filterCrirerial).populate([
-    { path: "authorCatego", model: Catego },
-    {
-      path: "authorBrand",
-      model: Brand,
-    },
-  ]);
-
-  if (!data.length) {
-    sendResponse(res, 200, true, { data: [], totalPage: 0 }, null, "No Data");
-  }
+  let data = await Product.find(filterCrirerial)
+    .sort(type)
+    .collation({ locale: "en_US", numericOrdering: true })
+    .populate([
+      { path: "authorCatego", model: Catego },
+      {
+        path: "authorBrand",
+        model: Brand,
+      },
+    ]);
 
   data = await data
     .sort(() => {
-      return Math.random() - 0.5;
+      if (!filterQuery.type) {
+        return Math.random() - 0.5;
+      } else {
+        return {};
+      }
     })
     .slice(offset, offset + limit);
 
