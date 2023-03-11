@@ -10,12 +10,16 @@ const productController = {};
 productController.getAllProduct = catchAsync(async (req, res, next) => {
   let { page, limit, ...filterQuery } = req.query;
   const allowfilter = ["search", "type"];
-  const types = ["latest_price"];
+
+  const arrBrand = [];
+  let arrTypeObject = [];
+  let type = {};
 
   page = parseInt(page) || 1;
   limit = parseInt(limit) || 20;
 
   let filterkey = Object.keys(filterQuery);
+
   filterkey.forEach((key) => {
     if (!allowfilter.includes(key)) {
       throw new AppError(401, `Query ${key} is not allowed`, "Search Error");
@@ -23,23 +27,23 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
     if (!filterQuery[key]) delete filterQuery[key];
   });
 
-  const arrBrand = [];
-  let type = {};
-
   if (filterQuery.search) {
     const brand = await Brand.find({
-      brand: { $regex: filterQuery?.search, $options: "i" },
+      brand: { $regex: new RegExp(filterQuery.search, "i") },
     });
     brand.forEach((e) => {
       arrBrand.push(e._id);
     });
   }
 
-  types.forEach(async (e) => {
-    if (filterQuery.type === e) {
-      type = { [filterQuery.type]: 1 };
-    }
-  });
+  if (filterQuery.type?.includes("high-low")) {
+    type = { latest_price: -1 };
+  } else if (filterQuery.type?.includes("low-high")) {
+    type = { latest_price: 1 };
+  } else {
+    arrTypeObject.push({ ["newProduct"]: `${filterQuery.type}` });
+  }
+
   const filterConditions = filterQuery.search
     ? [
         {
@@ -48,6 +52,7 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
             { model: { $regex: filterQuery.search } },
           ],
         },
+        arrTypeObject.length ? arrTypeObject[0] : {},
       ]
     : null;
 
@@ -68,10 +73,18 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
   const count = await Product.countDocuments(filterCrirerial);
   const totalPage = Math.ceil(count / limit);
 
+  if (!data.length) {
+    sendResponse(res, 200, true, { data: {}, totalPage: 0 }, null, "No Data");
+  }
+
   data = await data
-    // .sort(() => {
-    //   return Math.random() - 0.5;
-    // })
+    .sort(() => {
+      if (!filterQuery.type) {
+        return Math.random() - 0.5;
+      } else {
+        return {};
+      }
+    })
     .slice(offset, offset + limit);
 
   sendResponse(
@@ -98,17 +111,49 @@ productController.getSingleProduct = catchAsync(async (req, res, next) => {
 //get list brand procuct
 productController.getListBrandProduct = catchAsync(async (req, res, next) => {
   let { page, limit, ...filterQuery } = req.query;
-  const allow = ["brand", "search"];
+  const allowfilter = ["brand", "search", "type"];
+  const brand = filterQuery.brand;
 
   page = parseInt(page) || 1;
   limit = parseInt(limit) || 20;
 
+  let filterkey = Object.keys(filterQuery);
+
+  filterkey.forEach((key) => {
+    if (!allowfilter.includes(key)) {
+      throw new AppError(401, `Query ${key} is not allowed`, "Search Error");
+    }
+    if (!filterQuery[key]) delete filterQuery[key];
+  });
+
+  const newBrand = await Brand.findOne({ brand: brand });
+
+  const filterConditions = filterQuery.brand
+    ? [
+        { authorBrand: { $eq: newBrand._id } },
+        { model: { $regex: new RegExp(filterQuery.search, "i") } },
+      ]
+    : null;
+
+  const filterCrirerial = filterQuery.brand ? { $and: filterConditions } : {};
+
   const offset = limit * (page - 1);
-  const count = await Product.countDocuments({});
+  const count = await Product.countDocuments(filterCrirerial);
   const totalPage = Math.ceil(count / limit);
 
-  let products = await Product.find({});
-  products = products
+  let data = await Product.find(filterCrirerial).populate([
+    { path: "authorCatego", model: Catego },
+    {
+      path: "authorBrand",
+      model: Brand,
+    },
+  ]);
+
+  if (!data.length) {
+    sendResponse(res, 200, true, { data: {}, totalPage: 0 }, null, "No Data");
+  }
+
+  data = await data
     .sort(() => {
       return Math.random() - 0.5;
     })
@@ -118,7 +163,7 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
     res,
     200,
     true,
-    products,
+    { data, totalPage },
     null,
     "Get List Brand Product Success"
   );
