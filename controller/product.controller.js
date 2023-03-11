@@ -9,23 +9,38 @@ const productController = {};
 // get all product
 productController.getAllProduct = catchAsync(async (req, res, next) => {
   let { page, limit, ...filterQuery } = req.query;
-  console.log(filterQuery);
+  const allowfilter = ["search", "type"];
 
   page = parseInt(page) || 1;
   limit = parseInt(limit) || 20;
 
+  let filterkey = Object.keys(filterQuery);
+  filterkey.forEach((key) => {
+    if (!allowfilter.includes(key)) {
+      throw new AppError(401, `Query ${key} is not allowed`, "Search Error");
+    }
+    if (!filterQuery[key]) delete filterQuery[key];
+  });
+
   const arrBrand = [];
 
-  if (filterQuery.search) {
+  if (filterkey.length) {
     const brand = await Brand.find({
-      brand: { $regex: filterQuery.search, $options: "i" },
+      brand: { $regex: filterQuery?.search, $options: "i" },
     });
     brand.forEach((e) => {
       arrBrand.push(e._id);
     });
   }
 
-  const filterConditions = [{ authorBrand: { $in: arrBrand } }];
+  const filterConditions = [
+    {
+      $or: [
+        { authorBrand: { $in: arrBrand } },
+        { model: { $regex: filterQuery.search } },
+      ],
+    },
+  ];
 
   const filterCrirerial = filterConditions.length
     ? { $and: filterConditions }
