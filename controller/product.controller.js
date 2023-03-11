@@ -42,9 +42,7 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
     },
   ];
 
-  const filterCrirerial = filterConditions.length
-    ? { $and: filterConditions }
-    : {};
+  const filterCrirerial = filterkey.length ? { $and: filterConditions } : {};
 
   let data = await Product.find(filterCrirerial).populate([
     { path: "authorCatego", model: Catego },
