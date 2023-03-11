@@ -10,6 +10,7 @@ const productController = {};
 productController.getAllProduct = catchAsync(async (req, res, next) => {
   let { page, limit, ...filterQuery } = req.query;
   const allowfilter = ["search", "type"];
+  const types = ["latest_price"];
 
   page = parseInt(page) || 1;
   limit = parseInt(limit) || 20;
@@ -23,8 +24,9 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
   });
 
   const arrBrand = [];
+  let type = {};
 
-  if (filterkey.length) {
+  if (filterQuery.search) {
     const brand = await Brand.find({
       brand: { $regex: filterQuery?.search, $options: "i" },
     });
@@ -33,33 +35,43 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
     });
   }
 
-  const filterConditions = [
-    {
-      $or: [
-        { authorBrand: { $in: arrBrand } },
-        { model: { $regex: filterQuery.search } },
-      ],
-    },
-  ];
+  types.forEach(async (e) => {
+    if (filterQuery.type === e) {
+      type = { [filterQuery.type]: 1 };
+    }
+  });
+  const filterConditions = filterQuery.search
+    ? [
+        {
+          $or: [
+            { authorBrand: { $in: arrBrand } },
+            { model: { $regex: filterQuery.search } },
+          ],
+        },
+      ]
+    : null;
 
-  const filterCrirerial = filterkey.length ? { $and: filterConditions } : {};
+  const filterCrirerial = filterQuery.search ? { $and: filterConditions } : {};
 
-  let data = await Product.find(filterCrirerial).populate([
-    { path: "authorCatego", model: Catego },
-    {
-      path: "authorBrand",
-      model: Brand,
-    },
-  ]);
+  let data = await Product.find(filterCrirerial)
+    .sort(type)
+    .collation({ locale: "en_US", numericOrdering: true })
+    .populate([
+      { path: "authorCatego", model: Catego },
+      {
+        path: "authorBrand",
+        model: Brand,
+      },
+    ]);
 
   const offset = limit * (page - 1);
   const count = await Product.countDocuments(filterCrirerial);
   const totalPage = Math.ceil(count / limit);
 
   data = await data
-    .sort(() => {
-      return Math.random() - 0.5;
-    })
+    // .sort(() => {
+    //   return Math.random() - 0.5;
+    // })
     .slice(offset, offset + limit);
 
   sendResponse(
