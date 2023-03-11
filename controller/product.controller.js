@@ -75,10 +75,6 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
   const count = await Product.countDocuments(filterCrirerial);
   const totalPage = Math.ceil(count / limit);
 
-  if (!data.length) {
-    sendResponse(res, 200, true, { data: [], totalPage: 0 }, null, "No Data");
-  }
-
   data = await data
     .sort(() => {
       if (!filterQuery.type) {
@@ -166,10 +162,6 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
         model: Brand,
       },
     ]);
-
-  if (!data.length) {
-    sendResponse(res, 200, true, { data: [], totalPage: 0 }, null, "No Data");
-  }
 
   data = await data
     .sort(() => {
