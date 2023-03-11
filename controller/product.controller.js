@@ -76,7 +76,7 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
   const totalPage = Math.ceil(count / limit);
 
   if (!data.length) {
-    sendResponse(res, 200, true, { data: {}, totalPage: 0 }, null, "No Data");
+    sendResponse(res, 200, true, { data: [], totalPage: 0 }, null, "No Data");
   }
 
   data = await data
@@ -152,7 +152,7 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
   ]);
 
   if (!data.length) {
-    sendResponse(res, 200, true, { data: {}, totalPage: 0 }, null, "No Data");
+    sendResponse(res, 200, true, { data: [], totalPage: 0 }, null, "No Data");
   }
 
   data = await data
