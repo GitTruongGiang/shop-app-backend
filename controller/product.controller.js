@@ -80,7 +80,7 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
       if (!filterQuery.type) {
         return Math.random() - 0.5;
       } else {
-        return {};
+        return;
       }
     })
     .slice(offset, offset + limit);
@@ -168,7 +168,8 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
       if (!filterQuery.type) {
         return Math.random() - 0.5;
       } else {
-        return {};
+        console.log("sss");
+        return;
       }
     })
     .slice(offset, offset + limit);

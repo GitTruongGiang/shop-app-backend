@@ -20,7 +20,7 @@ const productSchema = new Schema(
     discount: { type: String, require: false, default: "" },
     ratings: { type: String, require: false, default: "" },
     weight: { type: String, require: false, default: "" },
-    os: { type: String, required: true, default: "" },
+    os: { type: String, require: false, default: "" },
     os_bit: { type: String, require: false, default: "" },
     ssd: { type: String, require: false, default: "" },
     ssd: { type: String, require: false, default: "" },
@@ -52,6 +52,12 @@ const productSchema = new Schema(
     memory_size: { type: String, require: false, default: "" },
     battery_size: { type: String, require: false, default: "" },
     screen_size: { type: String, require: false, default: "" },
+    // watch
+    dimensions: { type: String, require: false, default: "" },
+    zoomWide: { type: String, require: false, default: "" },
+    zoomTele: { type: String, require: false, default: "" },
+    maxResolution: { type: String, require: false, default: "" },
+    lowResolution: { type: String, require: false, default: "" },
   },
   { timestamps: true }
 );
