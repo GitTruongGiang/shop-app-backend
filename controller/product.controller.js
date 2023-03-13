@@ -110,9 +110,9 @@ productController.getSingleProduct = catchAsync(async (req, res, next) => {
 productController.getListBrandProduct = catchAsync(async (req, res, next) => {
   let { page, limit, ...filterQuery } = req.query;
   const allowfilter = ["category", "brand", "search", "type"];
-  const category = await Catego.findOne({ name: filterQuery.category });
 
   const brand = filterQuery.brand;
+  let category;
   let arrTypeObject = [];
   let type = {};
 
@@ -133,11 +133,15 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
   const filterConditions = filterQuery.brand
     ? [
         { authorBrand: { $eq: newBrand._id } },
-        { authorCatego: category._id },
         { model: { $regex: new RegExp(filterQuery.search, "i") } },
         arrTypeObject.length ? arrTypeObject[0] : {},
       ]
     : null;
+
+  if (filterQuery.category) {
+    category = await Catego.findOne({ name: filterQuery.category });
+    await filterConditions.push({ authorCatego: category._id });
+  }
 
   if (filterQuery.type) {
     if (filterQuery.type?.includes("high-low")) {
