@@ -189,4 +189,5 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
     "Get List Brand Product Success"
   );
 });
+
 module.exports = productController;
