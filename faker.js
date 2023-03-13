@@ -18,17 +18,18 @@ const fakerShop = async () => {
   // data = Array.from(data);
   const category = await Catego.findOne({ name: "camera" });
 
-  let brand = await Brand.findOne({ brand: "canon" });
+  let brand = await Brand.findOne({ brand: "fujifilm" });
   const data = await Product.find({
     authorBrand: brand._id,
     authorCatego: category._id,
   });
   for (let i = 0; i < data.length; i++) {
     const newData = await Product.findByIdAndUpdate(data[i]._id, {
-      imageUrl: `https://shop-app-backend-production.up.railway.app/imagecamera/canon${Math.floor(
-        Math.random() * (22 - 1) + 1
+      imageUrl: `https://shop-app-backend-production.up.railway.app/imagecamera/fujiflim${Math.floor(
+        Math.random() * (16 - 1) + 1
       )}.jpg`,
     });
+    console.log(newData);
   }
 
   // if (!brand) {
