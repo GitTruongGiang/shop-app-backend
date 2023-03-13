@@ -109,7 +109,9 @@ productController.getSingleProduct = catchAsync(async (req, res, next) => {
 //get list brand procuct
 productController.getListBrandProduct = catchAsync(async (req, res, next) => {
   let { page, limit, ...filterQuery } = req.query;
-  const allowfilter = ["brand", "search", "type"];
+  const allowfilter = ["category", "brand", "search", "type"];
+  const category = await Catego.findOne({ name: filterQuery.category });
+
   const brand = filterQuery.brand;
   let arrTypeObject = [];
   let type = {};
@@ -131,6 +133,7 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
   const filterConditions = filterQuery.brand
     ? [
         { authorBrand: { $eq: newBrand._id } },
+        { authorCatego: category._id },
         { model: { $regex: new RegExp(filterQuery.search, "i") } },
         arrTypeObject.length ? arrTypeObject[0] : {},
       ]
@@ -168,7 +171,6 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
       if (!filterQuery.type) {
         return Math.random() - 0.5;
       } else {
-        console.log("sss");
         return;
       }
     })
