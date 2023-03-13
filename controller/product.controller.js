@@ -78,7 +78,7 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
   data = await data
     .sort(() => {
       if (!filterQuery.type) {
-        return Math.random() - 1;
+        return Math.random() - 0.5;
       } else {
         return;
       }
