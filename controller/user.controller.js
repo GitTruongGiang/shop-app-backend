@@ -8,7 +8,6 @@ const userController = {};
 userController.createUser = catchAsync(async (req, res, next) => {
   let { email, password, name } = req.body;
   let { role } = req.query;
-  console.log(role);
   if (role && role.includes("master")) {
     console.log(password.length);
     let user = await User.findOne({ email });

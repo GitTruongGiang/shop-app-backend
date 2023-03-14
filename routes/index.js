@@ -9,9 +9,11 @@ router.get("/", function (req, res, next) {
 const authApi = require("./auth.api");
 const userApi = require("./user.api");
 const productApi = require("./product.api");
+const ortherApi = require("./orther.api");
 
 router.use("/auth", authApi);
 router.use("/users", userApi);
 router.use("/category", productApi);
+router.use("/orther", ortherApi);
 
 module.exports = router;

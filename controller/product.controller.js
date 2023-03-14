@@ -28,16 +28,20 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
     if (!filterQuery[key]) delete filterQuery[key];
   });
 
-  allowfilter.filter(async (e) => {
-    if (filterQuery[e] && filterQuery[e] === filterQuery.search) {
-      const brand = await Brand.find({
-        brand: { $regex: filterQuery.search, $options: "i" },
+  if (filterQuery.search) {
+    const brand = await Brand.find({
+      brand: { $regex: filterQuery.search, $options: "i" },
+    });
+    if (!brand) {
+      const category = await Catego.find({
+        name: { $regex: filterQuery.search, $options: "i" },
       });
-      await brand.find((e) => {
-        return arrBrand.push(e._id);
-      });
+      category.find((e) => arrCategory.push(e._id));
     }
-  });
+    brand.find((e) => {
+      arrBrand.push(e._id);
+    });
+  }
 
   if (filterQuery.type) {
     if (filterQuery.type?.includes("high-low")) {
@@ -54,7 +58,7 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
         {
           $or: [
             { authorBrand: { $in: arrBrand } },
-            { authorCatego: { $in: arrCategory } },
+            // { authorCatego: { $in: arrCategory } },
             { model: { $regex: filterQuery.search } },
           ],
         },
