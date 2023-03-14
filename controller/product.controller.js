@@ -11,7 +11,8 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
   let { page, limit, ...filterQuery } = req.query;
   const allowfilter = ["search", "type"];
 
-  const arrBrand = [];
+  let arrBrand = [];
+  let arrCategory = [];
   let arrTypeObject = [];
   let type = {};
 
@@ -27,14 +28,16 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
     if (!filterQuery[key]) delete filterQuery[key];
   });
 
-  if (filterQuery.search) {
-    const brand = await Brand.find({
-      brand: { $regex: filterQuery.search, $options: "i" },
-    });
-    brand.forEach((e) => {
-      arrBrand.push(e._id);
-    });
-  }
+  allowfilter.filter(async (e) => {
+    if (filterQuery[e] && filterQuery[e] === filterQuery.search) {
+      const brand = await Brand.find({
+        brand: { $regex: filterQuery.search, $options: "i" },
+      });
+      await brand.find((e) => {
+        return arrBrand.push(e._id);
+      });
+    }
+  });
 
   if (filterQuery.type) {
     if (filterQuery.type?.includes("high-low")) {
@@ -42,7 +45,7 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
     } else if (filterQuery.type?.includes("low-high")) {
       type = { latest_price: 1 };
     } else {
-      arrTypeObject.push({ ["newProduct"]: `${filterQuery.type}` });
+      arrTypeObject.push({ newProduct: `${filterQuery.type}` });
     }
   }
 
@@ -51,6 +54,7 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
         {
           $or: [
             { authorBrand: { $in: arrBrand } },
+            { authorCatego: { $in: arrCategory } },
             { model: { $regex: filterQuery.search } },
           ],
         },

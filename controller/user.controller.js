@@ -6,12 +6,14 @@ const userController = {};
 
 // create user {normal, master}
 userController.createUser = catchAsync(async (req, res, next) => {
-  let { email, password, name, role } = req.body;
-
-  if (role && role === "master") {
+  let { email, password, name } = req.body;
+  let { role } = req.query;
+  console.log(role);
+  if (role && role.includes("master")) {
+    console.log(password.length);
     let user = await User.findOne({ email });
     if (user) throw new AppError(400, "User exists", "Create User Error");
-    if (password.length >= 8)
+    if (!password.length >= 8)
       throw new AppError(
         400,
         "Password Must Be 8 Or More Characters",
@@ -19,7 +21,7 @@ userController.createUser = catchAsync(async (req, res, next) => {
       );
     const salt = await bcrypt.genSalt(10);
     password = await bcrypt.hash(password, salt);
-    user = await User.create({ email, password, name, role });
+    user = await User.create({ email, password, name, role: role });
     const accessToken = await user.generateToken();
     sendResponse(
       res,
@@ -32,7 +34,7 @@ userController.createUser = catchAsync(async (req, res, next) => {
   } else {
     let user = await User.findOne({ email });
     if (user) throw new AppError(400, "User exists", "Create User Error");
-    if (password.length >= 8)
+    if (!password.length >= 8)
       throw new AppError(
         400,
         "Password Must Be 8 Or More Characters",
