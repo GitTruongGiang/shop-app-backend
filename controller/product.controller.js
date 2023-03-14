@@ -32,7 +32,8 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
     const brand = await Brand.find({
       brand: { $regex: filterQuery.search, $options: "i" },
     });
-    if (!brand) {
+    if (brand.length < 1) {
+      console.log("sss");
       const category = await Catego.find({
         name: { $regex: filterQuery.search, $options: "i" },
       });
@@ -58,7 +59,7 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
         {
           $or: [
             { authorBrand: { $in: arrBrand } },
-            // { authorCatego: { $in: arrCategory } },
+            { authorCatego: { $in: arrCategory } },
             { model: { $regex: filterQuery.search } },
           ],
         },

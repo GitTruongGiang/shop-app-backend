@@ -23,7 +23,7 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
 
   let orther = await Orther.find({ userId: user._id });
 
-  if (orther.length === 0) {
+  if (orther.length < 1) {
     const ortherItems = [
       {
         name: `${product.authorBrand.brand} ${product.model}`,
@@ -41,6 +41,20 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
       total: 1,
     });
   } else {
+    const ortherItems = {
+      name: `${product.authorBrand.brand} ${product.model}`,
+      description:
+        `${product.weight} ${product.os} ${product.os_bit} ${product.ssd} ${product.ram_gb} ${product.processor_brand} ${product.processor_name} ${product.memory_size} ${product.battery_size} ${product.screen_size} ${product.dimensions} ${product.zoomWide} ${product.zoomTele} ${product.maxResolution} ${product.lowResolution}`.trim(),
+      price: product.latest_price,
+      imageUrl: product.imageUrl,
+      quantity: "1",
+      productId,
+    };
+    orther = await Orther.create({
+      userId: currentUserId,
+      ortherItems: {},
+      total: 1,
+    });
   }
 
   // const orther = await Orther.create({ userId: currentUserId });
