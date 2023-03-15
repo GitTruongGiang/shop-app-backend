@@ -1,7 +1,6 @@
 const { catchAsync, AppError, sendResponse } = require("../helpers/utils");
 const Brand = require("../model/brand");
 const Catego = require("../model/category");
-const { count } = require("../model/ordther");
 const Orther = require("../model/ordther");
 const Product = require("../model/product");
 const User = require("../model/user");
@@ -21,9 +20,13 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
   if (!product)
     throw new AppError(400, "Product Not Exists", "Create Orther Error");
 
-  let orther = await Orther.find({ userId: user._id });
+  let orther = await Orther.findOne({
+    userId: user._id,
+  });
 
-  if (orther.length < 1) {
+  let countQuanlity;
+
+  if (!orther) {
     const ortherItems = [
       {
         name: `${product.authorBrand.brand} ${product.model}`,
@@ -31,37 +34,71 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
           `${product.weight} ${product.os} ${product.os_bit} ${product.ssd} ${product.ram_gb} ${product.processor_brand} ${product.processor_name} ${product.memory_size} ${product.battery_size} ${product.screen_size} ${product.dimensions} ${product.zoomWide} ${product.zoomTele} ${product.maxResolution} ${product.lowResolution}`.trim(),
         price: product.latest_price,
         imageUrl: product.imageUrl,
-        quantity: "1",
+        quanlity: "1",
         productId,
       },
     ];
-    orther = await Orther.create({
+    await Orther.create({
       userId: currentUserId,
       ortherItems,
       total: 1,
     });
   } else {
-    const ortherItems = {
-      name: `${product.authorBrand.brand} ${product.model}`,
-      description:
-        `${product.weight} ${product.os} ${product.os_bit} ${product.ssd} ${product.ram_gb} ${product.processor_brand} ${product.processor_name} ${product.memory_size} ${product.battery_size} ${product.screen_size} ${product.dimensions} ${product.zoomWide} ${product.zoomTele} ${product.maxResolution} ${product.lowResolution}`.trim(),
-      price: product.latest_price,
-      imageUrl: product.imageUrl,
-      quantity: "1",
-      productId,
-    };
-    orther = await Orther.create({
-      userId: currentUserId,
-      ortherItems: {},
-      total: 1,
+    const indexOrther = orther.ortherItems.findIndex((e) => {
+      countQuanlity = parseInt(e.quanlity);
+      return e.productId.equals(product._id);
     });
+    if (indexOrther !== -1) {
+      await Orther.updateOne(
+        { _id: orther._id },
+        {
+          $set: { "ortherItems.$[element].quanlity": countQuanlity + 1 },
+          total: orther.total + 1,
+        },
+        {
+          arrayFilters: [{ "element.productId": { $eq: product._id } }],
+        }
+      );
+    } else {
+      const ortherItems = {
+        name: `${product.authorBrand.brand} ${product.model}`,
+        description:
+          `${product.weight} ${product.os} ${product.os_bit} ${product.ssd} ${product.ram_gb} ${product.processor_brand} ${product.processor_name} ${product.memory_size} ${product.battery_size} ${product.screen_size} ${product.dimensions} ${product.zoomWide} ${product.zoomTele} ${product.maxResolution} ${product.lowResolution}`.trim(),
+        price: product.latest_price,
+        imageUrl: product.imageUrl,
+        quanlity: "1",
+        productId,
+      };
+      await Orther.updateOne(
+        { _id: orther._id },
+        {
+          $push: { ortherItems: ortherItems },
+          total: orther.total + 1,
+        }
+      );
+    }
   }
+  sendResponse(res, 200, true, {}, null, "Create Orther Success");
+});
 
-  // const orther = await Orther.create({ userId: currentUserId });
+// get list orther
+ortherController.getListOrther = catchAsync(async (req, res, next) => {
+  const currentUserId = req.userId;
 
-  // const countTotal = totalOrther.length;
-  // await Orther.findByIdAndUpdate(totalOrther._id, { total: countTotal.length });
-  sendResponse(res, 200, true, orther, null, "Create Orther Success");
+  const user = await User.findById(currentUserId);
+  if (!user) throw new AppError(400, "Get List Orther Error");
+
+  const orthers = await Orther.findOne({ userId: currentUserId });
+  const data = orthers.ortherItems;
+
+  sendResponse(
+    res,
+    200,
+    true,
+    { data, total: orthers.total },
+    null,
+    "Get List Orther Success"
+  );
 });
 
 module.exports = ortherController;
