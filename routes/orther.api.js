@@ -3,6 +3,7 @@ const { param } = require("express-validator");
 const {
   createOrther,
   getListOrther,
+  updateCountOrther,
 } = require("../controller/orther.controller");
 const authentication = require("../middlwe/authentication");
 const validations = require("../middlwe/validations");
@@ -26,5 +27,17 @@ router.get(
   authentication.loginRequired,
   validations.validate([]),
   getListOrther
+);
+// update product in orther
+router.put(
+  "/single/:productId",
+  authentication.loginRequired,
+  validations.validate([
+    param("productId", "invalid productId")
+      .exists()
+      .notEmpty()
+      .custom(validations.checkObjectId),
+  ]),
+  updateCountOrther
 );
 module.exports = router;

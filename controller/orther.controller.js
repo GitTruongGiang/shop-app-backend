@@ -20,9 +20,7 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
   if (!product)
     throw new AppError(400, "Product Not Exists", "Create Orther Error");
 
-  let orther = await Orther.findOne({
-    userId: user._id,
-  });
+  let orther = await Orther.findOne({ userId: user._id });
 
   let countQuanlity;
 
@@ -101,4 +99,42 @@ ortherController.getListOrther = catchAsync(async (req, res, next) => {
   );
 });
 
+// update orther
+ortherController.updateCountOrther = catchAsync(async (req, res, next) => {
+  const currentUserId = req.userId;
+  const productId = req.params.productId;
+  const { quanlity } = req.body;
+  const user = await User.findById(currentUserId);
+  if (!user) throw new AppError(400, "Update Orther Error");
+
+  const orthers = await Orther.findOne({ userId: currentUserId });
+  const product = await Product.findById(productId);
+
+  const ortherIndex = orthers.ortherItems.findIndex((e) =>
+    e.productId.equals(product._id)
+  );
+
+  if (ortherIndex !== -1) {
+    let total = orthers.total + 1;
+
+    await Orther.updateOne(
+      { _id: orthers._id },
+      {
+        $set: { "ortherItems.$[element].quanlity": quanlity },
+        total: total,
+      },
+      {
+        arrayFilters: [{ "element.productId": { $eq: product._id } }],
+      }
+    );
+  } else {
+    throw new AppError(
+      400,
+      "Product Not Exists",
+      "Update Single Product Error"
+    );
+  }
+
+  sendResponse(res, 200, true, {}, null, "Update Orther Success");
+});
 module.exports = ortherController;
