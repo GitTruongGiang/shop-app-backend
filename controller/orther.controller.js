@@ -23,6 +23,7 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
   let orther = await Orther.findOne({ userId: user._id });
 
   let countQuanlity;
+  let totalAmount;
 
   if (!orther) {
     const ortherItems = [
@@ -46,14 +47,18 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
     });
   } else {
     const indexOrther = orther.ortherItems.findIndex((e) => {
-      countQuanlity = parseInt(e.quanlity);
+      countQuanlity = parseInt(e.quanlity) + 1;
+      totalAmount = parseInt(e.totalAmount) * countQuanlity;
       return e.productId.equals(product._id);
     });
     if (indexOrther !== -1) {
       await Orther.updateOne(
         { _id: orther._id },
         {
-          $set: { "ortherItems.$[element].quanlity": countQuanlity + 1 },
+          $set: {
+            "ortherItems.$[element].quanlity": countQuanlity,
+            "ortherItems.$[element].totalAmount": totalAmount,
+          },
           total: orther.total + 1,
         },
         {
