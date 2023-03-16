@@ -30,8 +30,9 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
         name: `${product.authorBrand.brand} ${product.model}`,
         description:
           `${product.weight} ${product.os} ${product.os_bit} ${product.ssd} ${product.ram_gb} ${product.processor_brand} ${product.processor_name} ${product.memory_size} ${product.battery_size} ${product.screen_size} ${product.dimensions} ${product.zoomWide} ${product.zoomTele} ${product.maxResolution} ${product.lowResolution}`.trim(),
-        price: product.latest_price,
-        salePrice: product.old_price,
+        latestPrice: product.latest_price,
+        oldPrice: product.old_price,
+        totalAmount: parseInt(product.latest_price),
         discount: product.discount,
         imageUrl: product.imageUrl,
         quanlity: "1",
@@ -64,8 +65,9 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
         name: `${product.authorBrand.brand} ${product.model}`,
         description:
           `${product.weight} ${product.os} ${product.os_bit} ${product.ssd} ${product.ram_gb} ${product.processor_brand} ${product.processor_name} ${product.memory_size} ${product.battery_size} ${product.screen_size} ${product.dimensions} ${product.zoomWide} ${product.zoomTele} ${product.maxResolution} ${product.lowResolution}`.trim(),
-        price: product.latest_price,
-        salePrice: product.old_price,
+        latestPrice: product.latest_price,
+        oldPrice: product.old_price,
+        totalAmount: parseInt(product.latest_price),
         discount: product.discount,
         imageUrl: product.imageUrl,
         quanlity: "1",
