@@ -33,7 +33,7 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
           `${product.weight} ${product.os} ${product.os_bit} ${product.ssd} ${product.ram_gb} ${product.processor_brand} ${product.processor_name} ${product.memory_size} ${product.battery_size} ${product.screen_size} ${product.dimensions} ${product.zoomWide} ${product.zoomTele} ${product.maxResolution} ${product.lowResolution}`.trim(),
         latestPrice: product.latest_price,
         oldPrice: product.old_price,
-        totalAmount: parseInt(product.latest_price),
+        totalAmount: product.latest_price,
         discount: product.discount,
         imageUrl: product.imageUrl,
         quanlity: "1",
@@ -72,7 +72,7 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
           `${product.weight} ${product.os} ${product.os_bit} ${product.ssd} ${product.ram_gb} ${product.processor_brand} ${product.processor_name} ${product.memory_size} ${product.battery_size} ${product.screen_size} ${product.dimensions} ${product.zoomWide} ${product.zoomTele} ${product.maxResolution} ${product.lowResolution}`.trim(),
         latestPrice: product.latest_price,
         oldPrice: product.old_price,
-        totalAmount: parseInt(product.latest_price),
+        totalAmount: product.latest_price,
         discount: product.discount,
         imageUrl: product.imageUrl,
         quanlity: "1",
@@ -126,7 +126,7 @@ ortherController.updateCountOrther = catchAsync(async (req, res, next) => {
 
   let totalAmount;
   const ortherIndex = orthers.ortherItems.findIndex((e) => {
-    totalAmount = e.totalAmount * parseInt(quanlity);
+    totalAmount = parseInt(e.totalAmount) * parseInt(quanlity);
     return e.productId.equals(product._id);
   });
 

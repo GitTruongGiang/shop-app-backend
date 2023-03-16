@@ -8,7 +8,7 @@ const ortherSchema = new Schema(
       {
         name: { type: String, required: true },
         description: { type: String, required: true },
-        totalAmount: { type: Number, required: true },
+        totalAmount: { type: String, required: true },
         latestPrice: { type: String, required: true },
         oldPrice: { type: String, required: true },
         discount: { type: String, require: true },
