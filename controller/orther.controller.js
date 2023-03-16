@@ -87,13 +87,16 @@ ortherController.getListOrther = catchAsync(async (req, res, next) => {
   if (!user) throw new AppError(400, "Get List Orther Error");
 
   const orthers = await Orther.findOne({ userId: currentUserId });
-  const data = orthers.ortherItems;
+  let data = [];
+  if (orthers !== null) {
+    data = orthers.ortherItems;
+  }
 
   sendResponse(
     res,
     200,
     true,
-    { data, total: orthers.total },
+    { data, total: orthers?.total },
     null,
     "Get List Orther Success"
   );
