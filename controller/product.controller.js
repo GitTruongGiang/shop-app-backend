@@ -33,7 +33,6 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
       brand: { $regex: filterQuery.search, $options: "i" },
     });
     if (brand.length < 1) {
-      console.log("sss");
       const category = await Catego.find({
         name: { $regex: filterQuery.search, $options: "i" },
       });

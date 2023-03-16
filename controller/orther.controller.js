@@ -31,6 +31,8 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
         description:
           `${product.weight} ${product.os} ${product.os_bit} ${product.ssd} ${product.ram_gb} ${product.processor_brand} ${product.processor_name} ${product.memory_size} ${product.battery_size} ${product.screen_size} ${product.dimensions} ${product.zoomWide} ${product.zoomTele} ${product.maxResolution} ${product.lowResolution}`.trim(),
         price: product.latest_price,
+        salePrice: product.old_price,
+        discount: product.discount,
         imageUrl: product.imageUrl,
         quanlity: "1",
         productId,
@@ -63,6 +65,8 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
         description:
           `${product.weight} ${product.os} ${product.os_bit} ${product.ssd} ${product.ram_gb} ${product.processor_brand} ${product.processor_name} ${product.memory_size} ${product.battery_size} ${product.screen_size} ${product.dimensions} ${product.zoomWide} ${product.zoomTele} ${product.maxResolution} ${product.lowResolution}`.trim(),
         price: product.latest_price,
+        salePrice: product.old_price,
+        discount: product.discount,
         imageUrl: product.imageUrl,
         quanlity: "1",
         productId,
@@ -140,4 +144,6 @@ ortherController.updateCountOrther = catchAsync(async (req, res, next) => {
 
   sendResponse(res, 200, true, {}, null, "Update Orther Success");
 });
+// update status orther
+ortherController.updateOrther;
 module.exports = ortherController;
