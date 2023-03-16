@@ -124,9 +124,11 @@ ortherController.updateCountOrther = catchAsync(async (req, res, next) => {
   const orthers = await Orther.findOne({ userId: currentUserId });
   const product = await Product.findById(productId);
 
-  const ortherIndex = orthers.ortherItems.findIndex((e) =>
-    e.productId.equals(product._id)
-  );
+  let totalAmount;
+  const ortherIndex = orthers.ortherItems.findIndex((e) => {
+    totalAmount = e.totalAmount * parseInt(quanlity);
+    return e.productId.equals(product._id);
+  });
 
   if (ortherIndex !== -1) {
     let total = orthers.total + 1;
@@ -134,7 +136,10 @@ ortherController.updateCountOrther = catchAsync(async (req, res, next) => {
     await Orther.updateOne(
       { _id: orthers._id },
       {
-        $set: { "ortherItems.$[element].quanlity": quanlity },
+        $set: {
+          "ortherItems.$[element].quanlity": quanlity,
+          "ortherItems.$[element].totalAmount": totalAmount,
+        },
         total: total,
       },
       {
