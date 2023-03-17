@@ -36,7 +36,7 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
         totalAmount: product.latest_price,
         discount: product.discount,
         imageUrl: product.imageUrl,
-        quanlity: "1",
+        quantity: "1",
         productId,
       },
     ];
@@ -47,7 +47,7 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
     });
   } else {
     const indexOrther = orther.ortherItems.findIndex((e) => {
-      countQuanlity = parseInt(e.quanlity) + 1;
+      countQuanlity = parseInt(e.quantity) + 1;
       totalAmount = parseInt(e.totalAmount) * countQuanlity;
       return e.productId.equals(product._id);
     });
@@ -56,7 +56,7 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
         { _id: orther._id },
         {
           $set: {
-            "ortherItems.$[element].quanlity": countQuanlity,
+            "ortherItems.$[element].quantity": countQuanlity,
             "ortherItems.$[element].totalAmount": totalAmount,
           },
           total: orther.total + 1,
@@ -75,7 +75,7 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
         totalAmount: product.latest_price,
         discount: product.discount,
         imageUrl: product.imageUrl,
-        quanlity: "1",
+        quantity: "1",
         productId,
       };
       await Orther.updateOne(
@@ -117,7 +117,7 @@ ortherController.getListOrther = catchAsync(async (req, res, next) => {
 ortherController.updateCountOrther = catchAsync(async (req, res, next) => {
   const currentUserId = req.userId;
   const productId = req.params.productId;
-  const { quanlity } = req.body;
+  const { quantity } = req.body;
   const user = await User.findById(currentUserId);
   if (!user) throw new AppError(400, "Update Orther Error");
 
@@ -126,7 +126,7 @@ ortherController.updateCountOrther = catchAsync(async (req, res, next) => {
 
   let totalAmount;
   const ortherIndex = orthers.ortherItems.findIndex((e) => {
-    totalAmount = parseInt(e.totalAmount) * parseInt(quanlity);
+    totalAmount = parseInt(e.totalAmount) * parseInt(quantity);
     return e.productId.equals(product._id);
   });
 
@@ -137,7 +137,7 @@ ortherController.updateCountOrther = catchAsync(async (req, res, next) => {
       { _id: orthers._id },
       {
         $set: {
-          "ortherItems.$[element].quanlity": quanlity,
+          "ortherItems.$[element].quantity": quantity,
           "ortherItems.$[element].totalAmount": totalAmount,
         },
         total: total,

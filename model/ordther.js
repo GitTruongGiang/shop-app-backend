@@ -13,7 +13,7 @@ const ortherSchema = new Schema(
         oldPrice: { type: String, required: true },
         discount: { type: String, require: true },
         imageUrl: { type: String, required: true },
-        quanlity: { type: String, required: true },
+        quantity: { type: String, required: true },
         productId: {
           type: Schema.Types.ObjectId,
           require: true,
