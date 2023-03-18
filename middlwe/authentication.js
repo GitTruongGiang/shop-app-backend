@@ -18,7 +18,6 @@ authentication.loginRequired = async (req, res, next) => {
           throw new AppError(401, "Token is invalid", "authentication error");
         }
       }
-      console.log(payload);
       req.userId = payload._id;
     });
     next();
