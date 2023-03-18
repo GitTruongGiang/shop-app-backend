@@ -116,18 +116,21 @@ ortherController.getListOrther = catchAsync(async (req, res, next) => {
 // update orther
 ortherController.updateCountOrther = catchAsync(async (req, res, next) => {
   const currentUserId = req.userId;
-  const productId = req.params.productId;
+  const ortherId = req.params.ortherId;
   const { quantity } = req.body;
+
+  if (quantity === 0) {
+    throw new AppError(400, "Quantity Cannot Be 0");
+  }
   const user = await User.findById(currentUserId);
   if (!user) throw new AppError(400, "Update Orther Error");
 
   const orthers = await Orther.findOne({ userId: currentUserId });
-  const product = await Product.findById(productId);
 
   let totalAmount;
   const ortherIndex = orthers.ortherItems.findIndex((e) => {
     totalAmount = parseInt(e.totalAmount) * parseInt(quantity);
-    return e.productId.equals(product._id);
+    return e._id.equals(ortherId);
   });
 
   if (ortherIndex !== -1) {
@@ -143,7 +146,7 @@ ortherController.updateCountOrther = catchAsync(async (req, res, next) => {
         total: total,
       },
       {
-        arrayFilters: [{ "element.productId": { $eq: product._id } }],
+        arrayFilters: [{ "element._id": { $eq: ortherId } }],
       }
     );
   } else {
@@ -156,6 +159,36 @@ ortherController.updateCountOrther = catchAsync(async (req, res, next) => {
 
   sendResponse(res, 200, true, {}, null, "Update Orther Success");
 });
+// deleted single product orther
+ortherController.deletedSingleProudctOrther = catchAsync(
+  async (req, res, next) => {
+    const currentUserId = req.userId;
+    const ortherId = req.params.ortherId;
+
+    const user = await User.findById(currentUserId);
+    if (!user)
+      throw new AppError(400, "User Not Exists", "Create Orther Error");
+
+    const orthers = await Orther.findOne({ userId: currentUserId });
+
+    let quantity;
+    const ortherIndex = orthers.ortherItems.findIndex((e) => {
+      quantity = parseInt(e.quantity);
+      return e._id.equals(ortherId);
+    });
+
+    if (ortherIndex !== -1) {
+      await Orther.updateOne(
+        { _id: orthers._id },
+        {
+          $pull: { ortherItems: { _id: ortherId } },
+          total: orthers.total - quantity,
+        }
+      );
+    }
+    sendResponse(res, 200, true, {}, null, "deleted Orther Success");
+  }
+);
 // update status orther
 ortherController.updateOrther;
 module.exports = ortherController;
