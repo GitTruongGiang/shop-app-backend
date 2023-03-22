@@ -19,14 +19,14 @@ const ortherSchema = new Schema(
           require: true,
           ref: "Product",
         },
+        status: {
+          type: String,
+          enum: ["pending", "confirm", "done"],
+          default: "pending",
+        },
       },
     ],
     total: { type: Number, default: 0 },
-    status: {
-      type: String,
-      enum: ["pending", "confirm", "done"],
-      default: "pending",
-    },
   },
   { timestamps: true }
 );

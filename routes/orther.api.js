@@ -5,6 +5,7 @@ const {
   getListOrther,
   updateCountOrther,
   deletedSingleProudctOrther,
+  updateOrther,
 } = require("../controller/orther.controller");
 const authentication = require("../middlwe/authentication");
 const validations = require("../middlwe/validations");
@@ -52,5 +53,12 @@ router.delete(
       .custom(validations.checkObjectId),
   ]),
   deletedSingleProudctOrther
+);
+//update orther
+router.put(
+  "/confirm",
+  authentication.loginRequired,
+  validations.validate([]),
+  updateOrther
 );
 module.exports = router;

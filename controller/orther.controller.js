@@ -87,9 +87,8 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
       );
     }
   }
-  sendResponse(res, 200, true, {}, null, "Create Orther Success");
+  sendResponse(res, 200, true, [], null, "Create Orther Success");
 });
-
 // get list orther
 ortherController.getListOrther = catchAsync(async (req, res, next) => {
   const currentUserId = req.userId;
@@ -112,7 +111,6 @@ ortherController.getListOrther = catchAsync(async (req, res, next) => {
     "Get List Orther Success"
   );
 });
-
 // update orther
 ortherController.updateCountOrther = catchAsync(async (req, res, next) => {
   const currentUserId = req.userId;
@@ -175,7 +173,7 @@ ortherController.updateCountOrther = catchAsync(async (req, res, next) => {
     );
   }
 
-  sendResponse(res, 200, true, {}, null, "Update Orther Success");
+  sendResponse(res, 200, true, [], null, "Update Orther Success");
 });
 // deleted single product orther
 ortherController.deletedSingleProudctOrther = catchAsync(
@@ -208,5 +206,14 @@ ortherController.deletedSingleProudctOrther = catchAsync(
   }
 );
 // update status orther
-ortherController.updateOrther;
+ortherController.updateOrther = catchAsync(async (req, res, next) => {
+  const currentUserId = req.userId;
+  const { dataOrthers } = req.body;
+  const user = await User.findById(currentUserId);
+  if (!user) throw new AppError(400, "User Not Exists", "Update Orther Error");
+  const orthers = await Orther.find({ userId: currentUserId });
+  
+  console.log(dataOrthers);
+  sendResponse(res, 200, true, [], null, "Update Orther Success");
+});
 module.exports = ortherController;
