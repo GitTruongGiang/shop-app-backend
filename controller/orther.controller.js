@@ -212,8 +212,21 @@ ortherController.updateOrther = catchAsync(async (req, res, next) => {
   const user = await User.findById(currentUserId);
   if (!user) throw new AppError(400, "User Not Exists", "Update Orther Error");
   const orthers = await Orther.find({ userId: currentUserId });
-  
-  console.log(dataOrthers);
+
+  for (let i = 0; i < dataOrthers?.length; i++) {
+    await Orther.updateOne(
+      { _id: orthers._id },
+      {
+        $set: {
+          "ortherItems.$[element].status": "confirm",
+        },
+      },
+      {
+        arrayFilters: [{ "element._id": { $eq: dataOrthers[i]._id } }],
+      }
+    );
+  }
+
   sendResponse(res, 200, true, [], null, "Update Orther Success");
 });
 module.exports = ortherController;
