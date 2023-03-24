@@ -6,6 +6,7 @@ const {
   updateCountOrther,
   deletedSingleProudctOrther,
   updateOrther,
+  getListBookingProduct,
 } = require("../controller/orther.controller");
 const authentication = require("../middlwe/authentication");
 const validations = require("../middlwe/validations");
@@ -60,5 +61,12 @@ router.put(
   authentication.loginRequired,
   validations.validate([]),
   updateOrther
+);
+// get list booking product
+router.get(
+  "/listbooking",
+  authentication.loginRequired,
+  validations.validate([]),
+  getListBookingProduct
 );
 module.exports = router;

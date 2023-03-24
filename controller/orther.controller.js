@@ -4,6 +4,7 @@ const Catego = require("../model/category");
 const Orther = require("../model/ordther");
 const Product = require("../model/product");
 const User = require("../model/user");
+const UserBooking = require("../model/userBooking");
 
 const ortherController = {};
 // create orther
@@ -92,14 +93,18 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
 // get list orther
 ortherController.getListOrther = catchAsync(async (req, res, next) => {
   const currentUserId = req.userId;
+  let { page, limit } = req.query;
 
   const user = await User.findById(currentUserId);
   if (!user) throw new AppError(400, "Get List Orther Error");
 
-  const orthers = await Orther.findOne({ userId: currentUserId });
+  const orthers = await Orther.findOne({
+    userId: currentUserId,
+  });
+
   let data = [];
   if (orthers !== null) {
-    data = orthers.ortherItems;
+    data = orthers.ortherItems.filter((e) => e.status === "pending");
   }
 
   sendResponse(
@@ -208,14 +213,25 @@ ortherController.deletedSingleProudctOrther = catchAsync(
 // update status orther
 ortherController.updateOrther = catchAsync(async (req, res, next) => {
   const currentUserId = req.userId;
-  const { dataOrthers } = req.body;
+  const { dataOrthers, infoUserBooking } = req.body;
   const user = await User.findById(currentUserId);
   if (!user) throw new AppError(400, "User Not Exists", "Update Orther Error");
   let orthers = await Orther.findOne({ userId: currentUserId });
 
-  const idProductOrthers = orthers.ortherItems?.map((e) => {
-    console.log(e._id.equals(dataOrthers[0].id));
-  });
+  const emailInfo = await UserBooking.findOne({ email: infoUserBooking.email });
+
+  if (!emailInfo) {
+    await UserBooking.create({
+      name: infoUserBooking.name,
+      email: infoUserBooking.email,
+      phone: infoUserBooking.phone,
+      address: infoUserBooking.address,
+      streetsName: infoUserBooking.streetsName,
+      district: infoUserBooking.district,
+      city: infoUserBooking.city,
+      authorUser: user._id,
+    });
+  }
 
   if (dataOrthers.length) {
     for (let i = 0; i < dataOrthers.length; i++) {
@@ -234,5 +250,32 @@ ortherController.updateOrther = catchAsync(async (req, res, next) => {
   }
 
   sendResponse(res, 200, true, [], null, "Update Orther Success");
+});
+// get list Booking
+ortherController.getListBookingProduct = catchAsync(async (req, res, next) => {
+  const currentUserId = req.userId;
+  const user = await User.findById(currentUserId);
+  if (!user)
+    throw new AppError(
+      400,
+      "Get List Booking Product",
+      "Get List Booking Product Error"
+    );
+
+  const orthers = await Orther.findOne({ userId: currentUserId });
+
+  let data = [];
+  if (orthers !== null) {
+    data = orthers.ortherItems.filter((e) => e.status === "confirm");
+  }
+
+  sendResponse(
+    res,
+    200,
+    { data, total: data?.length },
+    true,
+    null,
+    "Get List Booking Product Success"
+  );
 });
 module.exports = ortherController;
