@@ -285,8 +285,8 @@ ortherController.getListBookingProduct = catchAsync(async (req, res, next) => {
   sendResponse(
     res,
     200,
-    { data, totalProduct: orthers?.length, totalQuanlity: totalQuanlity },
     true,
+    { data, totalProduct: orthers?.length, totalQuanlity: totalQuanlity },
     null,
     "Get List Booking Product Success"
   );
