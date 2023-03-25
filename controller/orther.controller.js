@@ -103,15 +103,21 @@ ortherController.getListOrther = catchAsync(async (req, res, next) => {
   });
 
   let data = [];
+  let totalQuanlity = 0;
   if (orthers !== null) {
     data = orthers.ortherItems.filter((e) => e.status === "pending");
+  }
+  if (data.length) {
+    for (let i = 0; i < data.length; i++) {
+      totalQuanlity += parseInt(data[i].quantity);
+    }
   }
 
   sendResponse(
     res,
     200,
     true,
-    { data, total: orthers?.total },
+    { data, totalProduct: orthers?.length, totalQuanlity: totalQuanlity },
     null,
     "Get List Orther Success"
   );
@@ -265,14 +271,21 @@ ortherController.getListBookingProduct = catchAsync(async (req, res, next) => {
   const orthers = await Orther.findOne({ userId: currentUserId });
 
   let data = [];
+  let totalQuanlity = 0;
   if (orthers !== null) {
     data = orthers.ortherItems.filter((e) => e.status === "confirm");
+  }
+
+  if (data.length) {
+    for (let i = 0; i < data.length; i++) {
+      totalQuanlity += parseInt(data[i].quantity);
+    }
   }
 
   sendResponse(
     res,
     200,
-    { data, total: data?.length },
+    { data, totalProduct: orthers?.length, totalQuanlity: totalQuanlity },
     true,
     null,
     "Get List Booking Product Success"

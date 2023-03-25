@@ -30,12 +30,6 @@ const productSchema = new Schema(
     processor_name: { type: String, require: false, default: "" },
     processor_gnrtn: { type: String, require: false, default: "" },
     imageUrl: { type: String, require: false, default: "" },
-    status: {
-      type: String,
-      required: true,
-      enum: ["none", "pedding", "success"],
-      default: "none",
-    },
     stock: {
       type: String,
       require: false,
