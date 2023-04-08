@@ -12,19 +12,22 @@ mongoose
   .catch((err) => console.log(err));
 
 const fakerShop = async () => {
-  let data = await csv().fromFile("DataPhone.csv");
-  data = data.filter((e) => e.brand_name.includes("Apple")); //Samsung, Apple, Xiaomi, HUAWEI, Sony //Lenovo, APPLE, ASUS, DELL, acer
+  let data = await csv().fromFile("DataLaptop.csv");
+  data = data.filter((e) => e.brand.includes("APPLE")); //Samsung, Apple, Xiaomi, HUAWEI, Sony //Lenovo, APPLE, ASUS, DELL, acer
   data = new Set(data.map((e) => e));
   data = Array.from(data);
-  const category = await Catego.findOne({ name: "phone" });
+  const category = await Catego.findOne({ name: "laptop" });
 
   let brand = await Brand.findOne({ brand: "apple" });
-  const newData = await Product.find({
-    authorBrand: brand._id,
-    authorCatego: category._id,
-    latest_price: "NaN",
-  });
 
+  let products = await Product.find({
+    authorCatego: category._id,
+    authorBrand: brand._id,
+  });
+  products = products.map((e) => {
+    
+  })
+  console.log(products);
   // const data = await Product.find({
   //   authorBrand: brand._id,
   //   authorCatego: category._id,
@@ -52,21 +55,21 @@ const fakerShop = async () => {
   //   authorBrand: brand._id,
   // });
 
-  const idproduct = newData.map((e) => {
-    return e._id;
-  });
-  console.log(data.length);
-  console.log(newData.length);
+  // const idproduct = newData.map((e) => {
+  //   return e._id;
+  // });
+  // console.log(data.length);
+  // console.log(newData.length);
 
-  for (let i = 0; i < newData.length; i++) {
-    let discount = await Math.floor(Math.random() * 50);
-    const a = await Product.findByIdAndUpdate(idproduct[i], {
-      discount: `${discount}`,
-      old_price: `${15000}`,
-      latest_price: `${15000 - Math.floor(15000 * (discount / 100))}`,
-    });
-    console.log(a);
-  }
+  // for (let i = 0; i < newData.length; i++) {
+  //   let discount = await Math.floor(Math.random() * 50);
+  //   const a = await Product.findByIdAndUpdate(idproduct[i], {
+  //     discount: `${discount}`,
+  //     old_price: `${15000}`,
+  //     latest_price: `${15000 - Math.floor(15000 * (discount / 100))}`,
+  //   });
+  //   console.log(a);
+  // }
 
   // data = data.map((e) => {
   //   const discount = Math.floor(Math.random() * 50);

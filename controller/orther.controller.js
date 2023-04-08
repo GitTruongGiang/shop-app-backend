@@ -273,7 +273,7 @@ ortherController.getListBookingProduct = catchAsync(async (req, res, next) => {
   let data = [];
   let totalQuanlity = 0;
   if (orthers !== null) {
-    data = orthers.ortherItems.filter((e) => e.status === "confirm");
+    data = await orthers.ortherItems.filter((e) => e.status === "confirm");
   }
 
   if (data.length) {
