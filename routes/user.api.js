@@ -10,6 +10,7 @@ const {
 } = require("../controller/user.controller");
 const authentication = require("../middlwe/authentication");
 const validations = require("../middlwe/validations");
+const { getUserBooking } = require("../controller/userBooking.controller");
 const router = express.Router();
 
 // create User
@@ -80,5 +81,12 @@ router.post(
     body("password", "invalid password").exists().notEmpty(),
   ]),
   changePassword
+);
+// get user Booking
+router.get(
+  "/userBooking",
+  authentication.loginRequired,
+  validations.validate([]),
+  getUserBooking
 );
 module.exports = router;

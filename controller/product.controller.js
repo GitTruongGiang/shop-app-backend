@@ -9,7 +9,7 @@ const productController = {};
 // get all product
 productController.getAllProduct = catchAsync(async (req, res, next) => {
   let { page, limit, ...filterQuery } = req.query;
-  const allowfilter = ["search", "type"];
+  const allowfilter = ["search", "type", "gte", "lte"];
 
   let arrBrand = [];
   let arrCategory = [];
@@ -63,12 +63,14 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
           ],
         },
         arrTypeObject.length ? arrTypeObject[0] : {},
+        filterQuery.gte ? { latest_price: { $gte: filterQuery.gte } } : {},
+        filterQuery.lte ? { latest_price: { $lte: filterQuery.lte } } : {},
       ]
     : null;
 
   const filterCrirerial = filterQuery.search ? { $and: filterConditions } : {};
 
-  let data = await Product.find(filterCrirerial)
+  let data = await Product.find(filterCrirerial) // {name: , emal: ""}
     .sort(type)
     .collation({ locale: "en_US", numericOrdering: true })
     .populate([
@@ -78,6 +80,7 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
         model: Brand,
       },
     ]);
+  console.log(data);
 
   const offset = limit * (page - 1);
   const count = await Product.countDocuments(filterCrirerial);
@@ -117,7 +120,7 @@ productController.getSingleProduct = catchAsync(async (req, res, next) => {
 //get list brand procuct
 productController.getListBrandProduct = catchAsync(async (req, res, next) => {
   let { page, limit, ...filterQuery } = req.query;
-  const allowfilter = ["category", "brand", "search", "type"];
+  const allowfilter = ["category", "brand", "search", "type", "gte", "lte"];
 
   const brand = filterQuery.brand;
   let category;
@@ -143,6 +146,8 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
         { authorBrand: { $eq: newBrand._id } },
         { model: { $regex: new RegExp(filterQuery.search, "i") } },
         arrTypeObject.length ? arrTypeObject[0] : {},
+        filterQuery.gte ? { latest_price: { $gte: filterQuery.gte } } : {},
+        filterQuery.lte ? { latest_price: { $lte: filterQuery.lte } } : {},
       ]
     : null;
 
