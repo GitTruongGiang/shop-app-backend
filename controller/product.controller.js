@@ -21,11 +21,14 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
 
   let filterkey = Object.keys(filterQuery);
 
-  filterkey.forEach((key) => {
+  let isQuery;
+
+  filterkey.map((key) => {
     if (!allowfilter.includes(key)) {
       throw new AppError(401, `Query ${key} is not allowed`, "Search Error");
     }
     if (!filterQuery[key]) delete filterQuery[key];
+    if (filterQuery[key]) return (isQuery = true);
   });
 
   if (filterQuery.search) {
@@ -52,21 +55,23 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
       arrTypeObject.push({ newProduct: `${filterQuery.type}` });
     }
   }
+  console.log(isQuery);
 
-  const filterConditions = filterQuery.search
-    ? [
-        {
-          $or: [
-            { authorBrand: { $in: arrBrand } },
-            { authorCatego: { $in: arrCategory } },
-            { model: { $regex: filterQuery.search } },
-          ],
-        },
-        arrTypeObject.length ? arrTypeObject[0] : {},
-        filterQuery.gte ? { latest_price: { $gte: filterQuery.gte } } : {},
-        filterQuery.lte ? { latest_price: { $lte: filterQuery.lte } } : {},
-      ]
-    : null;
+  const filterConditions =
+    isQuery === true
+      ? [
+          {
+            $or: [
+              { authorBrand: { $in: arrBrand } },
+              { authorCatego: { $in: arrCategory } },
+              { model: { $regex: filterQuery.search } },
+            ],
+          },
+          arrTypeObject.length ? arrTypeObject[0] : {},
+          filterQuery.gte ? { latest_price: { $gte: filterQuery.gte } } : {},
+          filterQuery.lte ? { latest_price: { $lte: filterQuery.lte } } : {},
+        ]
+      : null;
 
   const filterCrirerial = filterQuery.search ? { $and: filterConditions } : {};
 
@@ -80,7 +85,6 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
         model: Brand,
       },
     ]);
-  console.log(data);
 
   const offset = limit * (page - 1);
   const count = await Product.countDocuments(filterCrirerial);

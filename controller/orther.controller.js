@@ -225,6 +225,7 @@ ortherController.updateOrther = catchAsync(async (req, res, next) => {
   let orthers = await Orther.findOne({ userId: currentUserId });
 
   const emailInfo = await UserBooking.findOne({ email: infoUserBooking.email });
+  console.log(infoUserBooking);
 
   if (!emailInfo) {
     await UserBooking.create({
@@ -290,6 +291,20 @@ ortherController.getListBookingProduct = catchAsync(async (req, res, next) => {
     null,
     "Get List Booking Product Success"
   );
+});
+// get user Booking
+ortherController.getUserBooking = catchAsync(async (req, res, next) => {
+  const currentUserId = req.userId;
+  let user = await User.findById(currentUserId);
+  if (!user)
+    throw new AppError(
+      400,
+      "Get User Booking Product",
+      "Get User Booking Product Error"
+    );
+  user = await UserBooking.find({ authorUser: user._id });
+  console.log(user);
+  sendResponse(res, 200, true, {}, null, "Get User Booking Product");
 });
 
 module.exports = ortherController;

@@ -1,6 +1,7 @@
 const { catchAsync, AppError, sendResponse } = require("../helpers/utils");
 const bcrypt = require("bcryptjs");
 const User = require("../model/user");
+const sendMail = require("../helpers/sendMail");
 
 const userController = {};
 
@@ -71,7 +72,7 @@ userController.updateUser = catchAsync(async (req, res, next) => {
   let user = await User.findById(userId);
   if (!user) throw new AppError(400, "User Not exstis", "Update User Error");
 
-  if (req.body.phone.length !== 10)
+  if (req.body.phone.length >= 10)
     throw new AppError(400, "Invalid Phone Number");
 
   const allow = ["name", "phone", "address", "avatarUrl"];
@@ -107,6 +108,9 @@ userController.resetPassword = catchAsync(async (req, res, next) => {
   const salt = await bcrypt.genSalt(10);
   const password = await bcrypt.hash("12345678", salt);
   console.log(password);
+  let templateVars = {name: user[0]?.name}
+  let subject = "Reset Password"
+  await sendMail({ template: "template", templateVars, subject, to:email});
   user = await User.updateOne({ email: email }, { password: password });
   sendResponse(res, 200, true, user, null, "Reset Password Success");
 });
