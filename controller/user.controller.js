@@ -104,14 +104,15 @@ userController.deletedUser = catchAsync(async (req, res, next) => {
 userController.resetPassword = catchAsync(async (req, res, next) => {
   const { email } = req.body;
   let user = await User.find({ email }, "+password");
-  if (!user) throw new AppError(400, "User Not Exists", "Reset Password Error");
+  if (!user.length) {
+    throw new AppError(400, "User Not Exists", "Reset Password Error");
+  }
   const salt = await bcrypt.genSalt(10);
   const password = await bcrypt.hash("12345678", salt);
-  console.log(password);
-  let templateVars = {name: user[0]?.name}
-  let subject = "Reset Password"
-  await sendMail({ template: "template", templateVars, subject, to:email});
-  user = await User.updateOne({ email: email }, { password: password });
+  let templateVars = { name: user[0]?.name };
+  let subject = "Reset Password";
+  await sendMail({ template: "template", templateVars, subject, to: email });
+  user = await User.updateOne({ email: email }, { password: password });  
   sendResponse(res, 200, true, user, null, "Reset Password Success");
 });
 // change password
