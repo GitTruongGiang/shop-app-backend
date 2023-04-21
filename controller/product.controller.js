@@ -13,7 +13,6 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
 
   let arrBrand = [];
   let arrCategory = [];
-  let arrTypeObject = [];
   let type = {};
 
   page = parseInt(page) || 1;
@@ -28,16 +27,16 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
       throw new AppError(401, `Query ${key} is not allowed`, "Search Error");
     }
     if (!filterQuery[key]) delete filterQuery[key];
-    if (filterQuery[key]) return (isQuery = true);
+    if (filterQuery[key]) isQuery = true;
   });
 
   if (filterQuery.search) {
     const brand = await Brand.find({
-      brand: { $regex: filterQuery.search, $options: "i" },
+      brand: { $regex: filterQuery.search, $options: "si" },
     });
     if (brand.length < 1) {
       const category = await Catego.find({
-        name: { $regex: filterQuery.search, $options: "i" },
+        name: { $regex: filterQuery.search, $options: "si" },
       });
       category.find((e) => arrCategory.push(e._id));
     }
@@ -46,17 +45,6 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
     });
   }
 
-  if (filterQuery.type) {
-    if (filterQuery.type?.includes("high-low")) {
-      type = { latest_price: -1 };
-    } else if (filterQuery.type?.includes("low-high")) {
-      type = { latest_price: 1 };
-    } else {
-      arrTypeObject.push({ newProduct: `${filterQuery.type}` });
-    }
-  }
-  console.log(isQuery);
-
   const filterConditions =
     isQuery === true
       ? [
@@ -64,18 +52,35 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
             $or: [
               { authorBrand: { $in: arrBrand } },
               { authorCatego: { $in: arrCategory } },
-              { model: { $regex: filterQuery.search } },
+              {
+                model: {
+                  $regex: new RegExp(filterQuery.search, "i") || "",
+                },
+              },
             ],
           },
-          arrTypeObject.length ? arrTypeObject[0] : {},
-          filterQuery.gte ? { latest_price: { $gte: filterQuery.gte } } : {},
-          filterQuery.lte ? { latest_price: { $lte: filterQuery.lte } } : {},
         ]
       : null;
 
-  const filterCrirerial = filterQuery.search ? { $and: filterConditions } : {};
+  if (filterQuery.type) {
+    if (filterQuery.type?.includes("high-low")) {
+      type = { latest_price: -1 };
+    } else if (filterQuery.type?.includes("low-high")) {
+      type = { latest_price: 1 };
+    } else {
+      filterConditions.push({ newProduct: `${filterQuery.type}` });
+    }
+  }
+  if (filterQuery.gte) {
+    filterConditions.push({ latest_price: { $gte: filterQuery.gte } });
+  }
+  if (filterQuery.lte) {
+    filterConditions.push({ latest_price: { $lte: filterQuery.lte } });
+  }
 
-  let data = await Product.find(filterCrirerial) // {name: , emal: ""}
+  const filterCrirerial = isQuery === true ? { $and: filterConditions } : {};
+
+  let data = await Product.find(filterCrirerial) // {name: "" , emal: ""}
     .sort(type)
     .collation({ locale: "en_US", numericOrdering: true })
     .populate([
@@ -87,7 +92,7 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
     ]);
 
   const offset = limit * (page - 1);
-  const count = await Product.countDocuments(filterCrirerial);
+  const count = await data.length;
   const totalPage = Math.ceil(count / limit);
 
   data = await data
@@ -128,7 +133,6 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
 
   const brand = filterQuery.brand;
   let category;
-  let arrTypeObject = [];
   let type = {};
 
   page = parseInt(page) || 1;
@@ -149,9 +153,6 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
     ? [
         { authorBrand: { $eq: newBrand._id } },
         { model: { $regex: new RegExp(filterQuery.search, "i") } },
-        arrTypeObject.length ? arrTypeObject[0] : {},
-        filterQuery.gte ? { latest_price: { $gte: filterQuery.gte } } : {},
-        filterQuery.lte ? { latest_price: { $lte: filterQuery.lte } } : {},
       ]
     : null;
 
@@ -166,15 +167,18 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
     } else if (filterQuery.type?.includes("low-high")) {
       type = { latest_price: 1 };
     } else {
-      arrTypeObject.push({ ["newProduct"]: `${filterQuery.type}` });
+      filterConditions.push({ ["newProduct"]: `${filterQuery.type}` });
     }
   }
 
-  const filterCrirerial = filterQuery.brand ? { $and: filterConditions } : {};
+  if (filterQuery.gte) {
+    filterConditions.push({ latest_price: { $gte: filterQuery.gte } });
+  }
+  if (filterQuery.lte) {
+    filterConditions.push({ latest_price: { $lte: filterQuery.lte } });
+  }
 
-  const offset = limit * (page - 1);
-  const count = await Product.countDocuments(filterCrirerial);
-  const totalPage = Math.ceil(count / limit);
+  const filterCrirerial = filterQuery.brand ? { $and: filterConditions } : {};
 
   let data = await Product.find(filterCrirerial)
     .sort(type)
@@ -186,6 +190,10 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
         model: Brand,
       },
     ]);
+
+  const offset = limit * (page - 1);
+  const count = await data.length;
+  const totalPage = Math.ceil(count / limit);
 
   data = await data
     .sort(() => {

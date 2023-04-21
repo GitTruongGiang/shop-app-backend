@@ -225,7 +225,9 @@ ortherController.updateOrther = catchAsync(async (req, res, next) => {
   let orthers = await Orther.findOne({ userId: currentUserId });
 
   const emailInfo = await UserBooking.findOne({ email: infoUserBooking.email });
-  console.log(infoUserBooking);
+ 
+  if (infoUserBooking.phone.length < 10)
+    throw new AppError(400, "Invalid Phone Number");
 
   if (!emailInfo) {
     await UserBooking.create({
