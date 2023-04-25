@@ -18,7 +18,6 @@ const productSchema = new Schema(
     latest_price: { type: String, require: false, default: "" },
     old_price: { type: String, require: false, default: "" },
     discount: { type: String, require: false, default: "" },
-    ratings: { type: String, require: false, default: "" },
     weight: { type: String, require: false, default: "" },
     os: { type: String, require: false, default: "" },
     os_bit: { type: String, require: false, default: "" },
@@ -42,6 +41,8 @@ const productSchema = new Schema(
       enum: ["old", "new"],
       default: "new",
     },
+    ratings: { type: Number, require: false, default: 5 },
+    review: [{ type: Schema.Types.ObjectId, ref: "Review" }],
     //phone
     memory_size: { type: String, require: false, default: "" },
     battery_size: { type: String, require: false, default: "" },
