@@ -1,6 +1,7 @@
 const { catchAsync, AppError, sendResponse } = require("../helpers/utils");
 const Brand = require("../model/brand");
 const Catego = require("../model/category");
+const Count = require("../model/count");
 const Orther = require("../model/ordther");
 const Product = require("../model/product");
 const User = require("../model/user");
@@ -219,46 +220,88 @@ ortherController.deletedSingleProudctOrther = catchAsync(
 // update status orther
 ortherController.updateOrther = catchAsync(async (req, res, next) => {
   const currentUserId = req.userId;
-  const { dataOrthers, infoUserBooking } = req.body;
+  const { dataOrthers, userBookingId, infoUserBooking } = req.body;
   const user = await User.findById(currentUserId);
   if (!user) throw new AppError(400, "User Not Exists", "Update Orther Error");
-  let orthers = await Orther.findOne({ userId: currentUserId });
 
-  const emailInfo = await UserBooking.findOne({ email: infoUserBooking.email });
- 
-  if (infoUserBooking.phone.length < 10)
-    throw new AppError(400, "Invalid Phone Number");
-
-  if (!emailInfo) {
-    await UserBooking.create({
-      name: infoUserBooking.name,
-      email: infoUserBooking.email,
-      phone: infoUserBooking.phone,
-      address: infoUserBooking.address,
-      streetsName: infoUserBooking.streetsName,
-      district: infoUserBooking.district,
-      city: infoUserBooking.city,
+  if (user.role === "normal") {
+    let orthers = await Orther.findOne({ userId: currentUserId });
+    const emailInfo = await UserBooking.findOne({
       authorUser: user._id,
     });
-  }
 
-  if (dataOrthers.length) {
-    for (let i = 0; i < dataOrthers.length; i++) {
-      await Orther.updateOne(
-        { _id: orthers._id },
-        {
-          $set: {
-            "ortherItems.$[element].status": "confirm",
-          },
-        },
-        {
-          arrayFilters: [{ "element._id": { $eq: dataOrthers[i].id } }],
-        }
-      );
+    if (!emailInfo) {
+      if (infoUserBooking.phone.length < 10)
+        throw new AppError(400, "Invalid Phone Number");
+
+      await UserBooking.create({
+        name: infoUserBooking.name,
+        email: infoUserBooking.email,
+        phone: infoUserBooking.phone,
+        address: infoUserBooking.address,
+        streetsName: infoUserBooking.streetsName,
+        district: infoUserBooking.district,
+        city: infoUserBooking.city,
+        authorUser: user._id,
+      });
     }
+
+    if (dataOrthers.length) {
+      for (let i = 0; i < dataOrthers.length; i++) {
+        await Orther.updateOne(
+          { _id: orthers._id },
+          {
+            $set: {
+              "ortherItems.$[element].status": "confirm",
+            },
+          },
+          {
+            arrayFilters: [{ "element._id": { $eq: dataOrthers[i].id } }],
+          }
+        );
+      }
+    }
+    sendResponse(res, 200, true, [], null, "Update Orther Success");
   }
 
-  sendResponse(res, 200, true, [], null, "Update Orther Success");
+  if (user.role === "master") {
+    let orthers = await Orther.findOne({ userId: userBookingId });
+    if (dataOrthers.length) {
+      for (let i = 0; i < dataOrthers.length; i++) {
+        await Orther.updateOne(
+          { _id: orthers._id },
+          {
+            $set: {
+              "ortherItems.$[element].status": "done",
+            },
+          },
+          {
+            arrayFilters: [{ "element._id": { $eq: dataOrthers[i].id } }],
+          }
+        );
+
+        const ortherIndex = orthers.ortherItems.findIndex((e) => {
+          if (e._id.equals(dataOrthers[i].id)) {
+            return e;
+          }
+        });
+
+        const product = await Product.findById(
+          orthers?.ortherItems[ortherIndex].productId
+        );
+        let count = await Count.findOne({
+          authorCatego: product.authorCatego,
+          authorBrand: product.authorBrand,
+        });
+
+        count = await Count.updateOne(
+          { _id: count._id },
+          { quantityRemaining: count.quantityRemaining - dataOrthers[i].total }
+        );
+      }
+    }
+    sendResponse(res, 200, true, [], null, "Update Orther Success");
+  }
 });
 // get list Booking
 ortherController.getListBookingProduct = catchAsync(async (req, res, next) => {

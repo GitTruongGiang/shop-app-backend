@@ -8,6 +8,15 @@ const productController = {};
 
 // get all product
 productController.getAllProduct = catchAsync(async (req, res, next) => {
+  const currentUserId = req.userId;
+  let user = await User.findById(currentUserId);
+  if (user.role !== "normal")
+    throw new AppError(
+      400,
+      "User Booking Not Exits",
+      "Get User Booking Product Error"
+    );
+
   let { page, limit, ...filterQuery } = req.query;
   const allowfilter = ["search", "type", "gte", "lte"];
 
@@ -116,6 +125,14 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
 });
 // get single product
 productController.getSingleProduct = catchAsync(async (req, res, next) => {
+  const currentUserId = req.userId;
+  let user = await User.findById(currentUserId);
+  if (user.role !== "normal")
+    throw new AppError(
+      400,
+      "User Booking Not Exits",
+      "Get User Booking Product Error"
+    );
   const productId = req.params.productId;
 
   const product = await Product.findById(productId)
@@ -128,6 +145,14 @@ productController.getSingleProduct = catchAsync(async (req, res, next) => {
 });
 //get list brand procuct
 productController.getListBrandProduct = catchAsync(async (req, res, next) => {
+  const currentUserId = req.userId;
+  let user = await User.findById(currentUserId);
+  if (user.role !== "normal")
+    throw new AppError(
+      400,
+      "User Booking Not Exits",
+      "Get User Booking Product Error"
+    );
   let { page, limit, ...filterQuery } = req.query;
   const allowfilter = ["category", "brand", "search", "type", "gte", "lte"];
 

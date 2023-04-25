@@ -27,6 +27,7 @@ userBookingController.updateUserBooking = catchAsync(async (req, res, next) => {
     throw new AppError(400, "User Not Match", "Update User Error");
 
   let user = await User.findById(currentUserId);
+
   if (!user)
     throw new AppError(
       400,

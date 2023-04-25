@@ -55,7 +55,7 @@ router.delete(
   ]),
   deletedSingleProudctOrther
 );
-//update orther
+//update orther confirm
 router.put(
   "/confirm",
   authentication.loginRequired,
