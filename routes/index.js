@@ -13,7 +13,7 @@ const ortherApi = require("./orther.api");
 
 router.use("/auth", authApi);
 router.use("/users", userApi);
-router.use("/category", productApi);
+router.use("/products", productApi);
 router.use("/orther", ortherApi);
 
 module.exports = router;

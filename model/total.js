@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const countSchema = new Schema(
+const totalSchema = new Schema(
   {
     authorBrand: { type: Schema.Types.ObjectId, required: true, ref: "Brand" },
     authorCatego: {
@@ -9,11 +9,11 @@ const countSchema = new Schema(
       required: true,
       ref: "Catego",
     },
-    count: { type: Number, require: false, default: 0 },
+    totalProduct: { type: Number, require: false, default: 0 },
     quantityRemaining: { type: Number, require: false, default: 0 },
   },
   { timestamps: true }
 );
 
-const Count = mongoose.model("Count", countSchema);
-module.exports = Count;
+const Total = mongoose.model("Total", totalSchema);
+module.exports = Total;
