@@ -1,6 +1,7 @@
 const { catchAsync, AppError, sendResponse } = require("../helpers/utils");
 const Brand = require("../model/brand");
 const Catego = require("../model/category");
+const Orther = require("../model/ordther");
 const Product = require("../model/product");
 const Review = require("../model/review");
 const User = require("../model/user");
@@ -109,6 +110,7 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
         path: "authorBrand",
         model: Brand,
       },
+      { path: "reviews", model: Review },
     ]);
 
   const offset = limit * (page - 1);
@@ -138,6 +140,8 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
 productController.getSingleProduct = catchAsync(async (req, res, next) => {
   const currentUserId = req.userId;
   let user = await User.findById(currentUserId);
+  if (!user)
+    throw new AppError(400, "user not exists", "get single product error");
   const productId = req.params.productId;
 
   const product = await Product.findById(productId).populate([
@@ -145,7 +149,7 @@ productController.getSingleProduct = catchAsync(async (req, res, next) => {
     { path: "authorBrand", model: Brand },
     { path: "reviews", model: Review },
   ]);
-  // .populate({ path: "authorBrand", model: Brand });
+
   if (!product)
     throw new AppError(400, "Product Not Exists", "Get Single Product Error");
 
@@ -221,6 +225,7 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
         path: "authorBrand",
         model: Brand,
       },
+      { path: "reviews", model: Review },
     ]);
 
   const offset = limit * (page - 1);

@@ -37,6 +37,7 @@ reviewController.addReview = catchAsync(async (req, res, next) => {
     } else if (percentTotal < 50 || percentTotal > 50) {
       total = Math.round(total / 100);
     }
+
     const pushProduct = await Product.findByIdAndUpdate(product._id, {
       $push: { reviews: review._id },
       ratings: total,
@@ -45,5 +46,64 @@ reviewController.addReview = catchAsync(async (req, res, next) => {
     sendResponse(res, 200, true, pushProduct, null, "create review error");
   }
 });
+// get single review
+reviewController.getSingleReview = catchAsync(async (req, res, next) => {
+  const currentUserId = req.userId;
+  const reviewId = req.params.reviewId;
+  const user = await User.findById(currentUserId);
+  if (!user)
+    throw new AppError(400, "user not exits", "get single Review error");
 
+  const review = await Review.findById(reviewId);
+  sendResponse(res, 200, true, review, null, "get single review success");
+});
+// update review
+reviewController.updateReview = catchAsync(async (req, res, next) => {
+  const currentUserId = req.userId;
+  const reviewId = req.params.reviewId;
+  const user = await User.findById(currentUserId);
+  if (!user)
+    throw new AppError(400, "user not exits", "get single Review error");
+
+  const allow = ["content", "rating"];
+  let review = await Review.findById({ _id: reviewId });
+  const product = await Product.findById(review.authorProductId);
+
+  allow.forEach(async (ele) => {
+    if (req.body[ele] !== undefined) {
+      review[ele] = req.body[ele];
+    }
+  });
+  await review.save();
+
+  let total = ((product.ratings + review.rating) / 2) * 100;
+  const percentTotal = Number(total.toString().slice(1));
+  if (percentTotal === 50) {
+    total = total / 100;
+  } else if (percentTotal < 50 || percentTotal > 50) {
+    total = Math.round(total / 100);
+  }
+
+  const pushProduct = await Product.findByIdAndUpdate(product._id, {
+    ratings: total,
+  });
+
+  sendResponse(res, 200, true, {}, null, "update review success");
+});
+// deleted review
+reviewController.deletedReview = catchAsync(async (req, res, next) => {
+  const currentUserId = req.userId;
+  const reviewId = req.params.reviewId;
+  const user = await User.findById(currentUserId);
+  if (!user)
+    throw new AppError(400, "user not exits", "get single Review error");
+
+  let review = await Review.findById({ _id: reviewId });
+  const product = await Product.findByIdAndUpdate(review.authorProductId, {
+    $pull: { reviews: review._id },
+  });
+  review.deleteOne();
+
+  sendResponse(res, 200, true, {}, null, "deleted review success");
+});
 module.exports = reviewController;
