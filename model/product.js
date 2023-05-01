@@ -28,7 +28,7 @@ const productSchema = new Schema(
       default: "new",
     },
     ratings: { type: Number, require: false, default: 5 },
-    review: [{ type: Schema.Types.ObjectId, ref: "Review" }],
+    reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
   },
   { timestamps: true }
 );

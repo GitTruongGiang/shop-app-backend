@@ -2,6 +2,7 @@ const { catchAsync, AppError, sendResponse } = require("../helpers/utils");
 const Brand = require("../model/brand");
 const Catego = require("../model/category");
 const Product = require("../model/product");
+const Review = require("../model/review");
 const User = require("../model/user");
 
 const productController = {};
@@ -142,6 +143,7 @@ productController.getSingleProduct = catchAsync(async (req, res, next) => {
   const product = await Product.findById(productId).populate([
     { path: "authorCatego", model: Catego },
     { path: "authorBrand", model: Brand },
+    { path: "reviews", model: Review },
   ]);
   // .populate({ path: "authorBrand", model: Brand });
   if (!product)
