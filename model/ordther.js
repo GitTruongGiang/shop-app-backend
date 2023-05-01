@@ -23,6 +23,7 @@ const ortherSchema = new Schema(
     ],
     totalPrice: { type: Number, require: true, default: 0 },
     totalProduct: { type: Number, require: true, default: 1 },
+    totalProductPaid: { type: Number, require: true, default: 0 },
   },
   { timestamps: true }
 );

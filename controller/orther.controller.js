@@ -3,6 +3,7 @@ const Brand = require("../model/brand");
 const Catego = require("../model/category");
 const Orther = require("../model/ordther");
 const Product = require("../model/product");
+const Total = require("../model/total");
 const User = require("../model/user");
 
 const ortherController = {};
@@ -23,6 +24,13 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
     throw new AppError(400, "Product Not Exists", "Create Orther Error");
 
   let orthers = await Orther.findOne({ userId: user._id });
+  const total = await Total.findOne({
+    authorBrand: product.authorBrand,
+    authorCatego: product.authorCatego,
+  });
+
+  if (total.quantityRemaining === 0)
+    throw new AppError(400, "out of stock", "create orther error");
 
   if (!orthers) {
     const ortherItems = [
@@ -136,11 +144,32 @@ ortherController.updateQuantity = catchAsync(async (req, res, next) => {
 
   const orthers = await Orther.findOne({ userId: user._id });
 
-  const idOrther = orthers?.ortherItems.find((obj) => {
+  const idOrther = await orthers?.ortherItems.find((obj) => {
     if (obj._id.equals(ortherId)) {
       return obj;
     }
   });
+  const product = await Product.findById(idOrther.productId);
+  const total = await Total.findOne({
+    authorBrand: product.authorBrand,
+    authorCatego: product.authorCatego,
+  });
+
+  let totalQuantity = total.quantityRemaining;
+
+  if (totalQuantity - idOrther.quantity <= 0)
+    throw new AppError(
+      400,
+      "The remaining quantity is gone",
+      "update quantity error"
+    );
+
+  if (totalQuantity === 0)
+    throw new AppError(
+      400,
+      "The remaining quantity is gone",
+      "update quantity error"
+    );
 
   if (idOrther.quantity >= 1) {
     const orther = await Orther.updateMany(
@@ -156,7 +185,7 @@ ortherController.updateQuantity = catchAsync(async (req, res, next) => {
     );
   }
 
-  sendResponse(res, 200, true, [], null, "Update Orther Success");
+  sendResponse(res, 200, true, [], null, "Update quantity Success");
 });
 // deleted single product orther
 ortherController.deletedSingleProudctOrther = catchAsync(
@@ -198,10 +227,12 @@ ortherController.updateOrther = catchAsync(async (req, res, next) => {
     let orthers = await Orther.findOne({ userId: user._id });
 
     let totalPrice = 0;
+    let totalProductPaid = 0;
     for (let i = 0; i < dataOrthers.length; i++) {
       if (orthers.ortherItems[i]._id.equals(dataOrthers[i]._id)) {
         totalPrice +=
           orthers.ortherItems[i].price * orthers.ortherItems[i].quantity;
+        totalProductPaid += orthers.ortherItems[i].quantity;
       }
       await Orther.updateMany(
         { _id: orthers._id },
@@ -217,7 +248,10 @@ ortherController.updateOrther = catchAsync(async (req, res, next) => {
       );
     }
 
-    await Orther.updateMany({ _id: orthers._id }, { totalPrice: totalPrice });
+    await Orther.updateMany(
+      { _id: orthers._id },
+      { totalPrice, totalProductPaid }
+    );
 
     sendResponse(res, 200, true, [], null, "Update Orther Success");
   }
@@ -227,7 +261,29 @@ ortherController.updateOrther = catchAsync(async (req, res, next) => {
     let orthers = await Orther.findOne({ userId: user._id });
 
     for (let i = 0; i < dataOrthers.length; i++) {
-      if (orthers?.ortherItems[i]._id.equals(dataOrthers[i]._id)) {
+      const product = await Product.findById(orthers?.ortherItems[i].productId);
+      if (
+        orthers?.ortherItems[i]._id.equals(dataOrthers[i]._id) &&
+        dataOrthers[i].status === "confirmed"
+      ) {
+        await Orther.updateMany(
+          { _id: orthers._id },
+          { $set: { "ortherItems.$[element].status": dataOrthers[i].status } },
+          { arrayFilters: [{ "element._id": { $eq: dataOrthers[i]._id } }] }
+        );
+        let total = await Total.findOne({
+          authorBrand: product.authorBrand,
+          authorCatego: product.authorCatego,
+        });
+        total.quantityRemaining =
+          total.quantityRemaining - orthers?.ortherItems[i].quantity;
+        total.save();
+
+        if (total.quantityRemaining === 0) {
+          product.stock = "outofstock";
+        }
+        product.save();
+      } else if (orthers?.ortherItems[i]._id.equals(dataOrthers[i]._id)) {
         await Orther.updateMany(
           { _id: orthers._id },
           { $set: { "ortherItems.$[element].status": dataOrthers[i].status } },
