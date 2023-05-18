@@ -138,10 +138,6 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
 });
 // get single product
 productController.getSingleProduct = catchAsync(async (req, res, next) => {
-  const currentUserId = req.userId;
-  let user = await User.findById(currentUserId);
-  if (!user)
-    throw new AppError(400, "user not exists", "get single product error");
   const productId = req.params.productId;
 
   const product = await Product.findById(productId).populate([

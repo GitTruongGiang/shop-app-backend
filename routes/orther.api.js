@@ -33,7 +33,7 @@ router.get(
 );
 // update product in orther
 router.put(
-  "/single/:ortherId",
+  "/quantity/:ortherId",
   authentication.loginRequired,
   validations.validate([
     param("ortherId", "invalid productId")

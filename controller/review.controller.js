@@ -43,7 +43,7 @@ reviewController.addReview = catchAsync(async (req, res, next) => {
       ratings: total,
     });
 
-    sendResponse(res, 200, true, pushProduct, null, "create review error");
+    sendResponse(res, 200, true, {}, null, "create review error");
   }
 });
 // get single review
