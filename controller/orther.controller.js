@@ -306,9 +306,8 @@ ortherController.getListBookingProduct = catchAsync(async (req, res, next) => {
       "Get List Booking Product Error"
     );
 
-  const orthers = await Orther.findOne({ userId: user._id }).populate([
-    { path: "ortherItems.productId" },
-  ]);
+  const orthers = await Orther.findOne({ userId: user._id });
+  console.log(orthers);
 
   if (orthers) {
     const data = orthers.ortherItems.filter((obj) => {
@@ -319,13 +318,12 @@ ortherController.getListBookingProduct = catchAsync(async (req, res, next) => {
       ) {
         return obj;
       }
-      return obj;
     });
     sendResponse(
       res,
       200,
       true,
-      { data },
+      data,
       null,
       "Get List Booking Product Success"
     );
