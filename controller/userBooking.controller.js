@@ -28,7 +28,7 @@ userBookingController.createUserBooking = catchAsync(async (req, res, next) => {
       authorUser: user._id,
     });
 
-    sendResponse(res, 200, true, data, null, "create user booking success");
+    sendResponse(res, 200, true, [], null, "create user booking success");
   }
 });
 // get user Booking
@@ -41,10 +41,10 @@ userBookingController.getUserBooking = catchAsync(async (req, res, next) => {
       "User Booking Not Exits",
       "Get User Booking Product Error"
     );
-  user = await UserBooking.find({ authorUser: user._id });
+  user = await UserBooking.findOne({ authorUser: user._id });
   if (!user) sendResponse(res, 200, true, [], null, "Get User Booking Product");
 
-  sendResponse(res, 200, true, user, null, "Get User Booking Product");
+  sendResponse(res, 200, true, { user }, null, "Get User Booking Product");
 });
 // update user booking
 userBookingController.updateUserBooking = catchAsync(async (req, res, next) => {
@@ -84,7 +84,7 @@ userBookingController.updateUserBooking = catchAsync(async (req, res, next) => {
   });
   await user.save();
 
-  sendResponse(res, 200, true, user, null, "Update User Success");
+  sendResponse(res, 200, true, [], null, "Update User Success");
 });
 
 module.exports = userBookingController;

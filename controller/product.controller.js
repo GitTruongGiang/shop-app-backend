@@ -149,7 +149,14 @@ productController.getSingleProduct = catchAsync(async (req, res, next) => {
   if (!product)
     throw new AppError(400, "Product Not Exists", "Get Single Product Error");
 
-  sendResponse(res, 200, true, product, null, "Get Single Product Success");
+  sendResponse(
+    res,
+    200,
+    true,
+    { data: product },
+    null,
+    "Get Single Product Success"
+  );
 });
 //get list brand procuct
 productController.getListBrandProduct = catchAsync(async (req, res, next) => {

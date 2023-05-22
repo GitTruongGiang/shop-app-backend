@@ -40,6 +40,7 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
           brand: product.authorBrand.brand,
           category: product.authorCatego.name,
         },
+        imageUrl: product.imageUrl,
         productId: product._id,
         price: product.description.latest_price,
         quantity: 1,
@@ -79,6 +80,7 @@ ortherController.createOrther = catchAsync(async (req, res, next) => {
           brand: product.authorBrand.brand,
           category: product.authorCatego.name,
         },
+        imageUrl: product.imageUrl,
         productId: product._id,
         price: product.description.latest_price,
         quantity: 1,
@@ -107,7 +109,7 @@ ortherController.getListOrther = catchAsync(async (req, res, next) => {
     const orthers = await Orther.findOne({
       userId: currentUserId,
     });
-
+    console.log(orthers);
     if (orthers) {
       const totalPrice = 0;
       let totalProduct = 0;
@@ -125,11 +127,27 @@ ortherController.getListOrther = catchAsync(async (req, res, next) => {
         null,
         "Get List Orther Success"
       );
+    } else {
+      sendResponse(
+        res,
+        200,
+        true,
+        { data: [], totalPrice: 0, totalProduct: 0 },
+        null,
+        "Get List Orther Success"
+      );
     }
   }
   if (user.role === "master") {
     const orthers = await Orther.find({});
-    sendResponse(res, 200, true, orthers, null, "get list orther success");
+    sendResponse(
+      res,
+      200,
+      true,
+      { data: orthers },
+      null,
+      "get list orther success"
+    );
   }
 });
 // update orther
@@ -323,7 +341,16 @@ ortherController.getListBookingProduct = catchAsync(async (req, res, next) => {
       res,
       200,
       true,
-      data,
+      { data },
+      null,
+      "Get List Booking Product Success"
+    );
+  } else {
+    sendResponse(
+      res,
+      200,
+      true,
+      { data: [] },
       null,
       "Get List Booking Product Success"
     );
