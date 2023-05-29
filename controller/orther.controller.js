@@ -238,7 +238,7 @@ ortherController.updateOrther = catchAsync(async (req, res, next) => {
   const currentUserId = req.userId;
   const { dataOrthers } = req.body;
   const { userId } = req.query;
-  const user = await User.findById(currentUserId);
+  let user = await User.findById(currentUserId);
   if (!user) throw new AppError(400, "User Not Exists", "Update Orther Error");
 
   if (user.role === "normal") {
@@ -275,11 +275,11 @@ ortherController.updateOrther = catchAsync(async (req, res, next) => {
   }
 
   if (user.role === "master") {
-    const user = await User.findById(userId);
-    let orthers = await Orther.findOne({ userId: user._id });
-
     for (let i = 0; i < dataOrthers.length; i++) {
+      user = await User.findById(dataOrthers[i].userId);
+      let orthers = await Orther.findOne({ userId: user._id });
       const product = await Product.findById(orthers?.ortherItems[i].productId);
+
       if (
         orthers?.ortherItems[i]._id.equals(dataOrthers[i]._id) &&
         dataOrthers[i].status === "confirmed"

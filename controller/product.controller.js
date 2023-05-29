@@ -88,6 +88,7 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
       filterConditions.push({ newProduct: `${filterQuery.type}` });
     }
   }
+
   if (filterQuery.gte) {
     filterConditions.push({
       "description.latest_price": { $gte: Number(filterQuery.gte) },
