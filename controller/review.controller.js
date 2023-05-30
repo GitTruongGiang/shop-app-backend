@@ -18,7 +18,8 @@ reviewController.addReview = catchAsync(async (req, res, next) => {
   if (!product)
     throw new AppError(400, "product not exists", "create review error");
 
-  const userReview = await Review.findOne({ userId: user._id });
+  const userReview = await Review.findOne({ authorProductId: product._id });
+  console.log(userReview);
 
   if (userReview) {
     throw new AppError(400, "you rated", "create review error");
@@ -63,7 +64,7 @@ reviewController.updateReview = catchAsync(async (req, res, next) => {
   const reviewId = req.params.reviewId;
   const user = await User.findById(currentUserId);
   if (!user)
-    throw new AppError(400, "user not exits", "get single Review error");
+    throw new AppError(400, "user not exits", "update single Review error");
 
   const allow = ["content", "rating"];
   let review = await Review.findById({ _id: reviewId });

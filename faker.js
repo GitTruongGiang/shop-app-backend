@@ -12,14 +12,15 @@ mongoose
   .catch((err) => console.log(err));
 
 const fakerShop = async () => {
-  // let data = await csv().fromFile("DataCamera.csv");
-  // data = data.filter((e) => e.Model.includes("Sony"));
-  //Samsung, Apple, Xiaomi, HUAWEI, Sony // Lenovo, APPLE, ASUS, DELL, acer
-  // data = new Set(data.map((e) => e));
-  // data = Array.from(data);
-  const category = await Catego.findOne({ name: "camera" });
+  let data = await csv().fromFile("DataLaptop.csv");
+  data = data.filter((e) => e.Model.includes("lenovo"));
+  Samsung, Apple, Xiaomi, HUAWEI, Sony; // Lenovo, APPLE, ASUS, DELL, acer
+  data = new Set(data.map((e) => e));
+  data = Array.from(data);
+  data = data.slice(0, 20);
+  const category = await Catego.findOne({ name: "laptop" });
 
-  let brand = await Brand.findOne({ brand: "sony" });
+  let brand = await Brand.findOne({ brand: "le" });
   const product = await Product.find({
     authorCatego: category._id,
     authorBrand: brand._id,
