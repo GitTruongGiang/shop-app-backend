@@ -171,5 +171,5 @@ const fakerTotal = async () => {
     quantityRemaining: Number(products.length),
   });
 }
-faker()
+fakerTotal()
 
