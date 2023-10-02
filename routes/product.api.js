@@ -37,4 +37,5 @@ router.get(
 );
 // get list brand product
 router.get("/brand", validations.validate([]), getListBrandProduct);
+
 module.exports = router;

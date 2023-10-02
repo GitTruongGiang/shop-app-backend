@@ -6,6 +6,8 @@ router.get("/", function (req, res, next) {
   res.status(200).send("hello worrd");
 });
 
+const createData = require("./createDataApi/index")
+
 const authApi = require("./auth.api");
 const userApi = require("./user.api");
 const productApi = require("./product.api");
@@ -17,5 +19,8 @@ router.use("/users", userApi);
 router.use("/products", productApi);
 router.use("/orther", ortherApi);
 router.use("/reviews", reviewApi);
+
+
+router.use("/data", createData)
 
 module.exports = router;

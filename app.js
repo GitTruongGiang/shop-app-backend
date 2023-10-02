@@ -12,6 +12,8 @@ app.use(cors());
 const mongoose = require("mongoose");
 const { AppError, sendResponse } = require("./helpers/utils");
 const mongoURI = process.env.MONGODB_URI;
+console.log(mongoURI)
+
 mongoose
   .connect(mongoURI)
   .then(() => {

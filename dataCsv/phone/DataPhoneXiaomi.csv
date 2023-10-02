@@ -1,0 +1,112 @@
+,brand_name,model_name,os,popularity,best_price,lowest_price,highest_price,sellers_amount,screen_size,memory_size,battery_size,release_date
+254,Xiaomi,Black Shark 2 Pro 8/128GB Black,Android,150,15149,14999,15299,2,6.39,128,4000,19-Nov
+255,Xiaomi,Black Shark 2 Pro 8/128GB Iceberg Grey,Android,43,15399,14910,15999,11,6.39,128,4000,19-Nov
+256,Xiaomi,Black Shark 3 12/256GB Black,Android,726,18319,17400,18999,4,6.67,256,4720,20-Jul
+257,Xiaomi,Black Shark 3 8/128GB Black,Android,1098,13846,13151,14999,31,6.67,128,4720,20-Jun
+258,Xiaomi,Black Shark 8/128GB Black,Android,53,13146,,,1,5.99,128,4000,18-May
+601,Xiaomi,Mi 10 Lite 6/128GB Cosmic Grey,Android,926,11104,8649,13083,9,6.57,128,4160,20-Jun
+602,Xiaomi,Mi 10 Lite 6/64GB Cosmic Grey,Android,1087,12456,,,1,6.57,64,4160,20-Jun
+603,Xiaomi,Mi 10 Lite 8/256GB Dream White,Android,836,12055,11898,12498,6,6.57,256,4160,20-Jun
+604,Xiaomi,Mi 10 Pro 8/256GB Gray,Android,1026,27999,,,1,6.67,256,4500,20-May
+605,Xiaomi,Mi 10T 6/128GB Cosmic Black,Android,1154,12778,12077,14728,49,6.67,128,5000,20-Oct
+606,Xiaomi,Mi 10T 8/128GB Cosmic Black,Android,1191,13236,12399,14538,47,6.67,128,5000,20-Oct
+607,Xiaomi,Mi 10T Lite 6/128GB Pearl Gray,Android,1133,9502,8999,10089,26,6.67,128,4820,20-Oct
+608,Xiaomi,Mi 10T Lite 6/64GB Pearl Gray,Android,1037,9039,8699,9299,5,6.67,64,4820,20-Oct
+609,Xiaomi,Mi 10T Pro 8/128GB Cosmic Black,Android,1152,15767,14999,16720,17,6.67,128,5000,20-Oct
+610,Xiaomi,Mi 10T Pro 8/256GB Cosmic Black,Android,1168,16756,15999,17538,12,6.67,256,5000,20-Oct
+611,Xiaomi,Mi Max 2 4/64GB Black,Android,393,3989,,,1,6.44,64,5300,17-Jun
+612,Xiaomi,Mi Note 10 Lite 6/64GB Purple,Android,558,8999,,,1,6.47,64,5260,20-May
+613,Xiaomi,Mi5 3/32GB Gold,Android,511,4098,,,1,5.15,32,3000,16-Feb
+738,Xiaomi,Poco F2 Pro 6/128GB Electric Purple,Android,1150,12999,,,1,6.67,128,4700,20-May
+739,Xiaomi,Poco M3 4/128GB Black,Android,1116,5372,4933,6005,41,6.53,128,6000,20-Nov
+740,Xiaomi,Poco M3 4/64GB Black,Android,1217,4708,4270,5345,34,6.53,64,6000,20-Nov
+741,Xiaomi,Poco X3 NFC 6/128GB Cobalt Blue,Android,1222,7152,6836,7999,59,6.67,128,5160,20-Sep
+742,Xiaomi,Poco X3 NFC 6/64GB Cobalt Blue,Android,1211,6488,6169,7499,57,6.67,64,5160,20-Sep
+743,Xiaomi,Pocophone F1 6/128GB Blue,Android,946,7231,6930,7999,16,6.18,128,4000,18-Aug
+761,Xiaomi,Redmi 10x 4G 4/128GB Blue,Android,1102,5133,4649,5600,10,6.53,128,5020,20-Jun
+762,Xiaomi,Redmi 10x 4G 6/128GB Blue,Android,966,5761,5569,5999,7,6.53,128,5020,20-Jun
+763,Xiaomi,Redmi 4x 2/16GB Black,Android,580,2358,2353,2363,2,5,16,4100,17-Mar
+764,Xiaomi,Redmi 4x 2/16GB Gold,Android,597,2358,2353,2363,2,5,16,4100,17-Mar
+765,Xiaomi,Redmi 4x 4/64GB Black,Android,1093,2826,2775,2850,4,5,64,4100,17-Aug
+766,Xiaomi,Redmi 4x 4/64GB Gold,Android,850,2826,2775,2850,4,5,64,4100,17-Jul
+767,Xiaomi,Redmi 5 3/32GB Black,Android,636,2950,,,1,5.7,32,3300,17-Dec
+768,Xiaomi,Redmi 5 3/32GB Gold,Android,743,3882,2940,4427,4,5.7,32,3300,17-Dec
+769,Xiaomi,Redmi 5 Plus 4/64GB Black,Android,608,3463,3458,3469,2,5.9,64,4000,17-Dec
+770,Xiaomi,Redmi 5 Plus 4/64GB Gold,Android,859,4265,3458,5349,4,5.9,64,4000,17-Dec
+771,Xiaomi,Redmi 5A 2/16GB Gold,Android,715,2420,2150,2560,2,5,16,3080,17-Oct
+772,Xiaomi,Redmi 5A 3/32GB Gold,Android,141,2400,2350,2450,2,5,32,3080,18-Apr
+773,Xiaomi,Redmi 5A 3/32GB Gray,Android,358,2749,2350,3449,3,5,32,3080,18-Apr
+774,Xiaomi,Redmi 5A 3/32GB Gray,Android,366,2749,2350,3449,3,5,32,3080,18-Apr
+775,Xiaomi,Redmi 6 3/32GB Black,Android,878,2794,2670,2877,5,5.45,32,3000,18-Jul
+776,Xiaomi,Redmi 6 3/32GB Gold,Android,758,2794,2670,2877,5,5.45,32,3000,18-Jun
+777,Xiaomi,Redmi 6 3/64GB Black,Android,667,3054,,,1,5.45,64,3000,18-Oct
+778,Xiaomi,Redmi 6 3/64GB Gold,Android,343,3193,3054,3333,2,5.45,64,3000,18-Oct
+779,Xiaomi,Redmi 6 3/64GB Gold,Android,362,3193,3054,3333,2,5.45,64,3000,18-Oct
+780,Xiaomi,Redmi 6 4/64GB Black,Android,760,3480,2995,4654,5,5.45,64,3000,18-Aug
+781,Xiaomi,Redmi 6 Pro 3/32GB Black,Android,657,3317,3233,3402,2,5.84,32,4000,18-Jul
+782,Xiaomi,Redmi 6 Pro 4/64GB Black,Android,733,3627,3550,3675,3,5.84,64,4000,18-Jul
+783,Xiaomi,Redmi 7 4/64GB Blue,Android,176,3671,3539,3785,4,6.26,64,4000,19-Mar
+784,Xiaomi,Redmi 7 4/64GB Blue,Android,212,3671,3539,3785,4,6.26,64,4000,19-Mar
+785,Xiaomi,Redmi 7a 2/16GB Black,Android,435,3248,,,1,5.45,16,4000,19-Jul
+786,Xiaomi,Redmi 7a 3/32GB Black,Android,999,3468,3248,3762,6,5.45,32,4000,19-Jul
+787,Xiaomi,Redmi 8 3/32GB Black,Android,1007,3559,3480,3599,3,6.22,32,5000,19-Oct
+788,Xiaomi,Redmi 8 4/64GB Blue,Android,1188,3840,3449,4286,31,6.22,64,5000,19-Oct
+789,Xiaomi,Redmi 8A 3/32GB Black,Android,866,3219,,,1,6.22,32,5000,20-Mar
+790,Xiaomi,Redmi 8A 4/64GB Black,Android,1158,3503,3315,3950,28,6.22,64,5000,20-Apr
+791,Xiaomi,Redmi 9 3/32GB Grey NFC,Android,1151,4047,3795,4854,69,6.53,32,5020,20-Jun
+792,Xiaomi,Redmi 9 3/32GB Purple no NFC,Android,654,4099,3733,4840,11,6.53,32,5020,20-Nov
+793,Xiaomi,Redmi 9 4/128GB Blue (no NFC),Android,367,4960,4690,5588,8,6.53,128,5020,20-Oct
+794,Xiaomi,Redmi 9 4/128GB Blue (no NFC),Android,359,4960,4690,5588,8,6.53,128,5020,20-Oct
+795,Xiaomi,Redmi 9 4/128GB Green (no NFC),Android,263,4822,4740,4929,3,6.53,128,5020,20-Oct
+796,Xiaomi,Redmi 9 4/128GB Green (no NFC),Android,275,4822,4740,4929,3,6.53,128,5020,20-Oct
+797,Xiaomi,Redmi 9 4/128GB Grey (no NFC),Android,615,4861,4638,5238,14,6.53,128,5020,20-Oct
+798,Xiaomi,Redmi 9 4/128GB Pink (no NFC),Android,748,4846,4690,5029,14,6.53,128,5020,20-Oct
+799,Xiaomi,Redmi 9 4/64GB Grey NFC,Android,1206,4492,4295,5254,47,6.53,64,5020,20-Jun
+800,Xiaomi,Redmi 9 4/64Gb Pink (no NFC),Android,976,4316,4077,4745,8,6.53,64,5020,20-Nov
+801,Xiaomi,Redmi 9 6/128GB Grey (no NFC),Android,1015,5179,4740,5663,13,6.53,128,5020,20-Oct
+802,Xiaomi,Redmi 9A 2/32GB Granite Gray,Android,1142,3163,2898,4155,62,6.53,32,5000,20-Jul
+803,Xiaomi,Redmi 9C 2/32GB Midnight Gray,Android,934,3490,3293,4302,36,6.53,32,5000,20-Aug
+804,Xiaomi,Redmi 9C 3/64GB Midnight Gray,Android,1123,3778,3697,4499,10,6.53,64,5000,20-Aug
+805,Xiaomi,Redmi 9C NFC 2/32GB Midnight Gray,Android,863,3484,3199,3809,29,6.53,32,5000,20-Aug
+806,Xiaomi,Redmi 9C NFC 3/64GB Midnight Gray,Android,796,4256,3599,4920,3,6.53,64,5000,20-Aug
+807,Xiaomi,Redmi 9T 4/128GB Twilight Blue,Android,1107,6064,5847,6600,10,6.53,128,6000,21-Jan
+808,Xiaomi,Redmi 9T 4/64GB Sunrise Orange,Android,544,5495,,,2,6.53,64,6000,21-Jan
+809,Xiaomi,Redmi K30 6/128GB Purple,Android,582,8000,7850,8200,3,6.67,128,4500,20-May
+810,Xiaomi,Redmi K30 8/128GB Purple,Android,1138,7725,7350,8499,16,6.67,128,4500,20-May
+811,Xiaomi,Redmi K30 8/256GB Red,Android,699,8577,8220,9214,7,6.67,256,4500,20-May
+812,Xiaomi,Redmi K30 Pro 6/128GB White,Android,963,14108,,,1,6.67,128,4700,20-May
+813,Xiaomi,Redmi Note 4 3/32GB (Gray),Android,669,2819,,,1,5.5,32,4100,16-Nov
+814,Xiaomi,Redmi Note 4 3/64GB (Gold),Android,255,2931,,,1,5.5,64,4100,16-Sep
+815,Xiaomi,Redmi Note 4 3/64GB (Gold),Android,267,2931,,,1,5.5,64,4100,16-Sep
+816,Xiaomi,Redmi Note 4x 3/32GB Black,Android,945,2675,2560,2789,4,5.5,32,4100,17-Feb
+817,Xiaomi,Redmi Note 4x 4/64GB Black,Android,1127,2809,2730,2889,2,5.5,64,4100,17-May
+818,Xiaomi,Redmi Note 4x 4/64GB Gold,Android,781,2809,2730,2889,2,5.5,64,4100,17-May
+819,Xiaomi,Redmi Note 5 3/32GB Black,Android,937,3320,3316,3325,2,5.9,32,4000,18-May
+820,Xiaomi,Redmi Note 5 3/32GB Gold,Android,717,3671,3260,4779,4,5.9,32,4000,18-May
+821,Xiaomi,Redmi Note 5 3/32GB Rose Gold,Android,347,3595,3377,3814,4,5.9,32,4000,18-May
+822,Xiaomi,Redmi Note 5 4/64GB Gold,Android,1120,3451,2999,3639,5,5.99,64,4000,18-May
+823,Xiaomi,Redmi Note 6 Pro 3/32GB Blue,Android,514,3599,,,1,6.26,32,4000,18-Oct
+824,Xiaomi,Redmi Note 6 Pro 4/64GB Blue,Android,420,5010,4873,5147,2,6.26,64,4000,18-Oct
+825,Xiaomi,Redmi Note 6 Pro 4/64GB Rose Gold,Android,392,5010,4873,5147,2,6.26,64,4000,18-Oct
+826,Xiaomi,Redmi Note 7 4/64GB Black,Android,1068,4323,4250,4459,3,6.3,64,4000,19-Jan
+827,Xiaomi,Redmi Note 8 3/32GB Blue,Android,971,4304,4299,4309,2,6.3,32,4000,19-Nov
+828,Xiaomi,Redmi Note 8 4/128GB Black,Android,912,5261,4999,5701,8,6.3,128,4000,19-Oct
+829,Xiaomi,Redmi Note 8 4/64GB Blue,Android,1171,4888,4499,5275,11,6.3,64,4000,19-Sep
+830,Xiaomi,Redmi Note 8 6/128GB Blue,Android,967,5514,5260,5990,7,6.3,128,4000,19-Sep
+831,Xiaomi,Redmi Note 8 6/64GB White,Android,771,5164,4999,5329,2,6.3,64,4000,20-Aug
+832,Xiaomi,Redmi Note 8 Pro 6/128GB Green,Android,1125,6811,6435,7264,31,6.53,128,4500,19-Sep
+833,Xiaomi,Redmi Note 8 Pro 6/64GB Green,Android,1193,6164,5699,6600,39,6.53,64,4500,19-Sep
+834,Xiaomi,Redmi Note 8 Pro 8/128GB White,Android,891,6630,,,1,6.53,128,4500,20-May
+835,Xiaomi,Redmi Note 8T 3/32GB Grey,Android,607,6600,,,1,6.3,32,4000,19-Nov
+836,Xiaomi,Redmi Note 8T 4/64GB Grey,Android,1141,4899,,,1,6.3,64,4000,19-Nov
+837,Xiaomi,Redmi Note 9 3/64GB Grey (no NFC),Android,465,4834,4773,4895,2,6.53,64,5020,20-Jul
+838,Xiaomi,Redmi Note 9 3/64GB Grey NFC,Android,1170,5085,4649,6099,45,6.53,64,5020,20-May
+839,Xiaomi,Redmi Note 9 4/128GB Grey NFC,Android,1200,5648,5399,6353,49,6.53,128,5020,20-May
+840,Xiaomi,Redmi Note 9 4/128GB White (no NFC),Android,646,5210,5104,5489,5,6.53,128,5020,20-Jul
+841,Xiaomi,Redmi Note 9 Pro 4/64GB Interstellar Grey,Android,757,7014,6999,7030,2,6.67,64,5020,20-Nov
+842,Xiaomi,Redmi Note 9 Pro 6/128GB Grey,Android,1219,7427,7025,7999,99,6.67,128,5020,20-May
+843,Xiaomi,Redmi Note 9 Pro 6/64GB Green,Android,1201,6820,6395,7204,102,6.67,64,5020,20-May
+844,Xiaomi,Redmi Note 9S 4/64GB Grey,Android,1196,5754,5295,6555,30,6.67,64,5020,20-Apr
+845,Xiaomi,Redmi Note 9S 6/128GB Grey,Android,1137,6576,6232,7239,16,6.67,128,5020,20-Apr
+846,Xiaomi,Redmi Note 9T 4/128GB Nightfall Black,Android,763,8442,7780,8999,6,6.53,128,5000,21-Jan
+847,Xiaomi,Redmi Note 9T 4/64GB Daybreak Purple,Android,958,7682,6999,8499,10,6.53,64,5000,21-Jan

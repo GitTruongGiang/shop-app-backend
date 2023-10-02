@@ -22,9 +22,6 @@ productController.createProduct = catchAsync(async (req, res, next) => {
 });
 // get all product
 productController.getAllProduct = catchAsync(async (req, res, next) => {
-  const currentUserId = req.userId;
-  let user = await User.findById(currentUserId);
-
   let { page, limit, ...filterQuery } = req.query;
   const allowfilter = ["search", "type", "gte", "lte"];
 
@@ -101,8 +98,7 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
   }
 
   const filterCrirerial = isQuery === true ? { $and: filterConditions } : {};
-
-  let data = await Product.find(filterCrirerial) // {name: "" , emal: ""}
+  let data = await Product.find({}) // {name: "" , emal: ""}
     .sort(type)
     .collation({ locale: "en_US", numericOrdering: true })
     .populate([
@@ -182,7 +178,6 @@ productController.getListBrandProduct = catchAsync(async (req, res, next) => {
   });
 
   const newBrand = await Brand.findOne({ brand: filterQuery.brand });
-
   const filterConditions = filterQuery.brand
     ? [
         { authorBrand: { $eq: newBrand._id } },
