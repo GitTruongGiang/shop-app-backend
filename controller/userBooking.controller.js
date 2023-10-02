@@ -26,6 +26,7 @@ userBookingController.createUserBooking = catchAsync(async (req, res, next) => {
       district: userBooking.district,
       city: userBooking.city,
       authorUser: user._id,
+      ortherAddress: userBooking.ortherAddress
     });
 
     sendResponse(res, 200, true, [], null, "create user booking success");

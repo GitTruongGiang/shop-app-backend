@@ -109,14 +109,13 @@ ortherController.getListOrther = catchAsync(async (req, res, next) => {
     const orthers = await Orther.findOne({
       userId: currentUserId,
     });
-    console.log(orthers);
     if (orthers) {
       const totalPrice = 0;
       let totalProduct = 0;
       const data = orthers?.ortherItems.filter((obj) => {
         if (obj.status === "pending") {
           totalProduct += obj.quantity;
-          return obj;
+          return true;
         }
       });
       sendResponse(
@@ -325,7 +324,6 @@ ortherController.getListBookingProduct = catchAsync(async (req, res, next) => {
     );
 
   const orthers = await Orther.findOne({ userId: user._id });
-  console.log(orthers);
 
   if (orthers) {
     const data = orthers.ortherItems.filter((obj) => {
@@ -337,6 +335,7 @@ ortherController.getListBookingProduct = catchAsync(async (req, res, next) => {
         return obj;
       }
     });
+    console.log(data)
     sendResponse(
       res,
       200,

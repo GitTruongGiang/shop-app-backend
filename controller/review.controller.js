@@ -1,7 +1,10 @@
 const { catchAsync, AppError, sendResponse } = require("../helpers/utils");
+const Orther = require("../model/ordther");
 const Product = require("../model/product");
 const Review = require("../model/review");
 const User = require("../model/user");
+const mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
 
 const reviewController = {};
 
@@ -19,32 +22,45 @@ reviewController.addReview = catchAsync(async (req, res, next) => {
     throw new AppError(400, "product not exists", "create review error");
 
   const userReview = await Review.findOne({ authorProductId: product._id });
-  console.log(userReview);
 
   if (userReview) {
     throw new AppError(400, "you rated", "create review error");
   } else {
-    const review = await Review.create({
-      authorProductId: product._id,
-      userId: user._id,
-      content: content,
-      rating: rating,
+    let orther = await Orther.findOne({
+      "ortherItems.productId": new ObjectId(`${productId}`),
     });
 
-    let total = ((product.ratings + rating) / 2) * 100;
-    const percentTotal = Number(total.toString().slice(1));
-    if (percentTotal === 50) {
-      total = total / 100;
-    } else if (percentTotal < 50 || percentTotal > 50) {
-      total = Math.round(total / 100);
+    orther = orther.ortherItems.find((obj) => {
+      if (obj.productId.equals(product._id)) {
+        return true;
+      }
+    });
+
+    if (orther.status !== "done") {
+      throw new AppError(400, "you can not reivew", "create review error");
+    } else {
+      const review = await Review.create({
+        authorProductId: product._id,
+        userId: user._id,
+        content: content,
+        rating: rating,
+      });
+
+      let total = ((product.ratings + rating) / 2) * 100;
+      const percentTotal = Number(total.toString().slice(1));
+      if (percentTotal === 50) {
+        total = total / 100;
+      } else if (percentTotal < 50 || percentTotal > 50) {
+        total = Math.round(total / 100);
+      }
+
+      const pushProduct = await Product.findByIdAndUpdate(product._id, {
+        $push: { reviews: review._id },
+        ratings: total,
+      });
+
+      sendResponse(res, 200, true, {}, null, "create review error");
     }
-
-    const pushProduct = await Product.findByIdAndUpdate(product._id, {
-      $push: { reviews: review._id },
-      ratings: total,
-    });
-
-    sendResponse(res, 200, true, {}, null, "create review error");
   }
 });
 // get single review

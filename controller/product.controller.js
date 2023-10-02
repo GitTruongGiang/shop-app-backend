@@ -52,9 +52,9 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
       const category = await Catego.find({
         name: { $regex: filterQuery.search, $options: "si" },
       });
-      category.find((e) => arrCategory.push(e._id));
+      category.forEach((e) => arrCategory.push(e._id));
     }
-    brand.find((e) => {
+    brand.forEach((e) => {
       arrBrand.push(e._id);
     });
   }
@@ -76,13 +76,15 @@ productController.getAllProduct = catchAsync(async (req, res, next) => {
         ]
       : null;
 
+      console.log(filterQuery)
+
   if (filterQuery.type) {
     if (filterQuery.type?.includes("high-low")) {
-      type = { "description.latest_price": -1 };
+      type = { "description.latest_price": -1, };
     } else if (filterQuery.type?.includes("low-high")) {
-      type = { "description.latest_price": 1 };
+      type = { "description.latest_price": 1, };
     } else {
-      filterConditions.push({ newProduct: `${filterQuery.type}` });
+      filterConditions.push({ newProduct: `${filterQuery.type}`});
     }
   }
 
